@@ -1,182 +1,34 @@
 (function () {
-    const STORAGE_KEY = "levy-site-data-v1";
-
-    const DEFAULT_DATA = {
-        version: 1,
+    const STORAGE_KEY = "levy-site-data-cache-v2";
+    const DEFAULT_DATA = Object.freeze({
+        version: 2,
         subjects: {
-            calculo: [
-                {
-                    id: "calc-1",
-                    category: "slides",
-                    title: "Introdução às Funções",
-                    description: "Material de aula sobre domínio, contradomínio e tipos de funções.",
-                    href: "../slides/aula01.pdf",
-                    actionLabel: "Abrir"
-                },
-                {
-                    id: "calc-2",
-                    category: "exercicios",
-                    title: "Lista de Limites",
-                    description: "20 exercícios práticos com foco em indeterminações.",
-                    href: "#",
-                    actionLabel: "Visualizar"
-                },
-                {
-                    id: "calc-3",
-                    category: "provas",
-                    title: "Avaliação Parcial 01 (2025.2)",
-                    description: "Prova resolvida sobre limites e continuidade.",
-                    href: "#",
-                    actionLabel: "Ver Prova"
-                },
-                {
-                    id: "calc-4",
-                    category: "livros",
-                    title: "James Stewart - Vol 1",
-                    description: "O guia definitivo para os fundamentos de Cálculo.",
-                    href: "#",
-                    actionLabel: "Detalhes"
-                },
-                {
-                    id: "calc-5",
-                    category: "youtube",
-                    title: "Grings - O Matemático",
-                    description: "Playlist completa de limites e derivadas.",
-                    href: "https://youtube.com",
-                    actionLabel: "Assistir"
-                }
-            ],
-            fisica: [
-                {
-                    id: "fis-1",
-                    category: "slides",
-                    title: "Cinemática Vetorial",
-                    description: "Material de aula sobre vetores, posição e aceleração.",
-                    href: "../slides/fisica-aula-01.pdf",
-                    actionLabel: "Abrir"
-                },
-                {
-                    id: "fis-2",
-                    category: "exercicios",
-                    title: "Lista de Estática",
-                    description: "Exercícios sobre equilíbrio de ponto material e corpo rígido.",
-                    href: "#",
-                    actionLabel: "Visualizar"
-                },
-                {
-                    id: "fis-3",
-                    category: "provas",
-                    title: "Avaliação Parcial 1 (2025.2)",
-                    description: "Prova resolvida sobre as Leis de Newton.",
-                    href: "#",
-                    actionLabel: "Ver Prova"
-                },
-                {
-                    id: "fis-4",
-                    category: "livros",
-                    title: "Halliday & Resnick - Vol 1",
-                    description: "Fundamentos de Física: Mecânica Clássica.",
-                    href: "#",
-                    actionLabel: "Detalhes"
-                }
-            ],
-            programacao: [
-                {
-                    id: "prog-1",
-                    category: "slides",
-                    title: "Introdução a Ponteiros",
-                    description: "Endereçamento de memória e operadores & e *.",
-                    href: "#",
-                    actionLabel: "Abrir"
-                },
-                {
-                    id: "prog-2",
-                    category: "exercicios",
-                    title: "Lista: Alocação Dinâmica",
-                    description: "Manipulação de malloc(), calloc() e free().",
-                    href: "#",
-                    actionLabel: "Ver Código"
-                },
-                {
-                    id: "prog-3",
-                    category: "youtube",
-                    title: "De Aluno para Aluno",
-                    description: "Melhor canal para lógica de programação em C.",
-                    href: "https://youtube.com",
-                    actionLabel: "Assistir"
-                }
-            ]
+            calculo: [],
+            fisica: [],
+            programacao: []
         },
-        calendar: [
-            {
-                id: "cal-event-1",
-                title: "Prova de Cálculo I",
-                type: "prova",
-                subject: "calculo",
-                date: "2026-04-08",
-                time: "08:00",
-                description: "Revisar limites, continuidade e derivadas."
-            },
-            {
-                id: "cal-event-2",
-                title: "Entrega de relatório de Física",
-                type: "trabalho",
-                subject: "fisica",
-                date: "2026-04-15",
-                time: "18:30",
-                description: "Relatório com análise do experimento de vetores."
-            },
-            {
-                id: "cal-event-3",
-                title: "Lista de Programação em C",
-                type: "lista",
-                subject: "programacao",
-                date: "2026-04-20",
-                time: "22:00",
-                description: "Entrega da lista sobre ponteiros e alocação dinâmica."
-            }
-        ]
-    };
+        calendar: []
+    });
+
+    let currentData = cloneData(DEFAULT_DATA);
+    let hasLoaded = false;
+    let loadingPromise = null;
 
     function cloneData(data) {
         return JSON.parse(JSON.stringify(data));
     }
 
     function buildId(prefix) {
+        if (window.crypto && typeof window.crypto.randomUUID === "function") {
+            return `${prefix}-${window.crypto.randomUUID()}`;
+        }
+
         return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     }
 
-    function saveData(data) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        window.dispatchEvent(new CustomEvent("site-data-updated", {
-            detail: cloneData(data)
-        }));
-    }
-
-    function ensureData() {
-        try {
-            const rawData = localStorage.getItem(STORAGE_KEY);
-
-            if (!rawData) {
-                const seeded = cloneData(DEFAULT_DATA);
-                saveData(seeded);
-                return seeded;
-            }
-
-            const parsedData = JSON.parse(rawData);
-
-            if (!parsedData || typeof parsedData !== "object" || !parsedData.subjects || !parsedData.calendar) {
-                const seeded = cloneData(DEFAULT_DATA);
-                saveData(seeded);
-                return seeded;
-            }
-
-            return parsedData;
-        } catch (error) {
-            const seeded = cloneData(DEFAULT_DATA);
-            saveData(seeded);
-            return seeded;
-        }
+    function getDataFilePath() {
+        const normalizedPath = window.location.pathname.replace(/\\/g, "/");
+        return normalizedPath.includes("/paginas/") ? "../data/site-data.json" : "data/site-data.json";
     }
 
     function normalizeSubject(subject) {
@@ -187,105 +39,248 @@
             "programacao-c": "programacao"
         };
 
-        return subjectMap[subject] || subject;
+        return subjectMap[String(subject || "").trim()] || "calculo";
+    }
+
+    function normalizeMaterial(item, fallbackPrefix) {
+        const category = String(item?.category || "slides").trim() || "slides";
+        const title = String(item?.title || "").trim();
+        const description = String(item?.description || "").trim();
+        const href = String(item?.href || "").trim();
+        const actionLabel = String(item?.actionLabel || "Abrir").trim() || "Abrir";
+        const filePath = String(item?.filePath || "").trim();
+        const fileName = String(item?.fileName || "").trim();
+        const fileType = String(item?.fileType || "").trim();
+        const fileSize = Number.isFinite(Number(item?.fileSize)) ? Number(item.fileSize) : 0;
+
+        if (!title) {
+            return null;
+        }
+
+        return {
+            id: String(item?.id || buildId(fallbackPrefix)).trim() || buildId(fallbackPrefix),
+            category,
+            title,
+            description,
+            href,
+            actionLabel,
+            filePath,
+            fileName,
+            fileType,
+            fileSize
+        };
+    }
+
+    function normalizeCalendarEvent(event) {
+        const title = String(event?.title || "").trim();
+        const date = String(event?.date || "").trim();
+
+        if (!title || !date) {
+            return null;
+        }
+
+        return {
+            id: String(event?.id || buildId("event")).trim() || buildId("event"),
+            title,
+            type: String(event?.type || "lembrete").trim() || "lembrete",
+            subject: normalizeSubject(event?.subject || "geral"),
+            date,
+            time: String(event?.time || "").trim(),
+            description: String(event?.description || "").trim()
+        };
+    }
+
+    function sortEvents(events) {
+        return [...events].sort((firstEvent, secondEvent) => {
+            const firstDate = new Date(`${firstEvent.date}T${firstEvent.time || "00:00"}`).getTime();
+            const secondDate = new Date(`${secondEvent.date}T${secondEvent.time || "00:00"}`).getTime();
+            return firstDate - secondDate;
+        });
+    }
+
+    function sanitizeData(data) {
+        const nextData = {
+            version: 2,
+            subjects: {
+                calculo: [],
+                fisica: [],
+                programacao: []
+            },
+            calendar: []
+        };
+
+        Object.keys(nextData.subjects).forEach((subject) => {
+            const sourceItems = Array.isArray(data?.subjects?.[subject]) ? data.subjects[subject] : [];
+            nextData.subjects[subject] = sourceItems
+                .map((item) => normalizeMaterial(item, subject))
+                .filter(Boolean);
+        });
+
+        nextData.calendar = sortEvents(
+            (Array.isArray(data?.calendar) ? data.calendar : [])
+                .map((event) => normalizeCalendarEvent(event))
+                .filter(Boolean)
+        );
+
+        return nextData;
+    }
+
+    function dispatchUpdate() {
+        window.dispatchEvent(new CustomEvent("site-data-updated", {
+            detail: cloneData(currentData)
+        }));
+    }
+
+    function saveCache(data) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        } catch (error) {
+            // Ignora falhas de cache local.
+        }
+    }
+
+    function readCache() {
+        try {
+            const rawData = localStorage.getItem(STORAGE_KEY);
+
+            if (!rawData) {
+                return null;
+            }
+
+            return sanitizeData(JSON.parse(rawData));
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async function loadData(forceRefresh = false) {
+        if (hasLoaded && !forceRefresh) {
+            return cloneData(currentData);
+        }
+
+        if (loadingPromise && !forceRefresh) {
+            return loadingPromise;
+        }
+
+        const cachedData = readCache();
+
+        if (cachedData && !forceRefresh) {
+            currentData = cachedData;
+        }
+
+        loadingPromise = (async () => {
+            try {
+                const response = await fetch(`${getDataFilePath()}?t=${Date.now()}`, {
+                    cache: "no-store"
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Falha ao carregar os dados públicos (${response.status}).`);
+                }
+
+                const remoteData = sanitizeData(await response.json());
+                currentData = remoteData;
+                hasLoaded = true;
+                saveCache(remoteData);
+                dispatchUpdate();
+                return cloneData(currentData);
+            } catch (error) {
+                currentData = cachedData || cloneData(DEFAULT_DATA);
+                hasLoaded = true;
+                saveCache(currentData);
+                dispatchUpdate();
+                return cloneData(currentData);
+            } finally {
+                loadingPromise = null;
+            }
+        })();
+
+        return loadingPromise;
+    }
+
+    function setData(nextData) {
+        currentData = sanitizeData(nextData);
+        hasLoaded = true;
+        saveCache(currentData);
+        dispatchUpdate();
+        return cloneData(currentData);
     }
 
     function getData() {
-        return cloneData(ensureData());
+        return cloneData(currentData);
     }
 
     function getSubjectItems(subject) {
-        const data = ensureData();
-        return cloneData(data.subjects[normalizeSubject(subject)] || []);
+        return cloneData(currentData.subjects[normalizeSubject(subject)] || []);
     }
 
     function upsertSubjectItem(subject, item) {
         const normalizedSubject = normalizeSubject(subject);
-        const data = ensureData();
-        const items = data.subjects[normalizedSubject] || [];
-        const nextItem = {
-            id: item.id || buildId(normalizedSubject),
-            category: item.category,
-            title: item.title,
-            description: item.description,
-            href: item.href || "",
-            actionLabel: item.actionLabel || "Abrir",
-            fileId: item.fileId || "",
-            fileName: item.fileName || "",
-            fileType: item.fileType || "",
-            fileSize: item.fileSize || 0
-        };
-        const index = items.findIndex((currentItem) => currentItem.id === nextItem.id);
+        const nextData = getData();
+        const nextItem = normalizeMaterial(item, normalizedSubject);
 
-        if (index >= 0) {
-            items[index] = nextItem;
-        } else {
-            items.push(nextItem);
+        if (!nextItem) {
+            return null;
         }
 
-        data.subjects[normalizedSubject] = items;
-        saveData(data);
+        const subjectItems = nextData.subjects[normalizedSubject] || [];
+        const itemIndex = subjectItems.findIndex((currentItem) => currentItem.id === nextItem.id);
+
+        if (itemIndex >= 0) {
+            subjectItems[itemIndex] = nextItem;
+        } else {
+            subjectItems.push(nextItem);
+        }
+
+        nextData.subjects[normalizedSubject] = subjectItems;
+        setData(nextData);
         return cloneData(nextItem);
     }
 
     function deleteSubjectItem(subject, itemId) {
         const normalizedSubject = normalizeSubject(subject);
-        const data = ensureData();
-        data.subjects[normalizedSubject] = (data.subjects[normalizedSubject] || []).filter((item) => item.id !== itemId);
-        saveData(data);
-    }
-
-    function sortEvents(events) {
-        return [...events].sort((firstEvent, secondEvent) => {
-            const firstDate = `${firstEvent.date}T${firstEvent.time || "00:00"}`;
-            const secondDate = `${secondEvent.date}T${secondEvent.time || "00:00"}`;
-            return new Date(firstDate) - new Date(secondDate);
-        });
+        const nextData = getData();
+        nextData.subjects[normalizedSubject] = (nextData.subjects[normalizedSubject] || [])
+            .filter((item) => item.id !== itemId);
+        setData(nextData);
     }
 
     function getCalendarEvents() {
-        const data = ensureData();
-        return sortEvents(cloneData(data.calendar));
+        return sortEvents(cloneData(currentData.calendar));
     }
 
     function upsertCalendarEvent(event) {
-        const data = ensureData();
-        const nextEvent = {
-            id: event.id || buildId("event"),
-            title: event.title,
-            type: event.type,
-            subject: normalizeSubject(event.subject || "geral"),
-            date: event.date,
-            time: event.time || "",
-            description: event.description || ""
-        };
-        const index = data.calendar.findIndex((currentEvent) => currentEvent.id === nextEvent.id);
+        const nextData = getData();
+        const nextEvent = normalizeCalendarEvent(event);
 
-        if (index >= 0) {
-            data.calendar[index] = nextEvent;
-        } else {
-            data.calendar.push(nextEvent);
+        if (!nextEvent) {
+            return null;
         }
 
-        data.calendar = sortEvents(data.calendar);
-        saveData(data);
+        const eventIndex = nextData.calendar.findIndex((currentEvent) => currentEvent.id === nextEvent.id);
+
+        if (eventIndex >= 0) {
+            nextData.calendar[eventIndex] = nextEvent;
+        } else {
+            nextData.calendar.push(nextEvent);
+        }
+
+        nextData.calendar = sortEvents(nextData.calendar);
+        setData(nextData);
         return cloneData(nextEvent);
     }
 
     function deleteCalendarEvent(eventId) {
-        const data = ensureData();
-        data.calendar = data.calendar.filter((event) => event.id !== eventId);
-        saveData(data);
+        const nextData = getData();
+        nextData.calendar = nextData.calendar.filter((event) => event.id !== eventId);
+        setData(nextData);
     }
 
     function getUpcomingCalendarEvents(limit = 4) {
         const now = new Date();
-        const upcomingEvents = getCalendarEvents().filter((event) => {
-            const eventDate = new Date(`${event.date}T${event.time || "23:59"}`);
-            return eventDate >= now;
-        });
-
-        return upcomingEvents.slice(0, limit);
+        return getCalendarEvents()
+            .filter((event) => new Date(`${event.date}T${event.time || "23:59"}`) >= now)
+            .slice(0, limit);
     }
 
     function getEventsForMonth(year, monthIndex) {
@@ -296,13 +291,15 @@
     }
 
     function resetData() {
-        const seeded = cloneData(DEFAULT_DATA);
-        saveData(seeded);
-        return seeded;
+        return setData(DEFAULT_DATA);
     }
 
     window.SiteData = {
+        buildId,
+        ready: () => loadData(false),
+        refresh: () => loadData(true),
         getData,
+        setData,
         getSubjectItems,
         upsertSubjectItem,
         deleteSubjectItem,
@@ -315,5 +312,5 @@
         normalizeSubject
     };
 
-    ensureData();
+    loadData(false);
 })();

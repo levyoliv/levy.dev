@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -73,12 +73,55 @@
             <section class="admin-hero">
                 <p class="mono-text">Área administrativa</p>
                 <h1 class="admin-title">Gerenciar conteúdos</h1>
-                <p class="admin-subtitle">Cadastre materiais por disciplina, organize provas e trabalhos e use caminhos do repositório ou links públicos.</p>
+                <p class="admin-subtitle">Cadastre materiais por disciplina, organize provas e trabalhos e publique tudo direto no repositório para o GitHub Pages atualizar para todos.</p>
                 <div class="admin-hero-actions">
                     <a href="../index.html#agenda" class="btn btn-primary">Ver agenda pública</a>
                     <a href="../index.html#destaques" class="btn btn-secondary">Voltar aos destaques</a>
                     <span class="admin-security-pill">Acesso restrito</span>
                 </div>
+            </section>
+
+            <section class="admin-publish-shell">
+                <article class="admin-card admin-publish-card">
+                    <div class="admin-publish-header">
+                        <div>
+                            <p class="mono-text">Publicação pronta</p>
+                            <h2>Enviar e publicar</h2>
+                            <p class="form-helper">Você só precisa preencher os materiais e enviar. A conexão técnica fica escondida aqui.</p>
+                        </div>
+                        <span class="admin-publish-pill" id="github-repo-display">levyoliv/levy.dev</span>
+                    </div>
+
+                    <form id="github-config-form" class="admin-form">
+                        <input type="hidden" id="github-owner" value="levyoliv">
+                        <input type="hidden" id="github-repo" value="levy.dev">
+
+                        <details class="admin-advanced-settings" id="github-advanced-settings">
+                            <summary>Configuração avançada de publicação</summary>
+
+                            <div class="form-columns">
+                                <label>
+                                    <span>Branch publicada</span>
+                                    <input type="text" id="github-branch" value="main" placeholder="main" required>
+                                </label>
+
+                                <label>
+                                    <span>Token de publicação</span>
+                                    <input type="password" id="github-token" placeholder="github_pat_..." autocomplete="off">
+                                </label>
+                            </div>
+
+                            <p class="form-helper">Use um token fino com permissão de <code>Contents: Read and write</code>. Ele fica salvo só nesta sessão.</p>
+                        </details>
+
+                        <div class="form-actions">
+                            <button class="btn btn-primary" type="submit">Conectar publicação</button>
+                            <button class="btn btn-secondary" type="button" id="github-clear-token">Limpar token</button>
+                        </div>
+
+                        <p class="form-helper" id="github-config-status" aria-live="polite">Conecte a publicação uma vez e depois é só enviar os arquivos.</p>
+                    </form>
+                </article>
             </section>
 
             <section class="admin-tabs-shell">
@@ -102,51 +145,56 @@
                             <form id="material-form" class="admin-form">
                                 <input type="hidden" id="material-id">
 
-                            <label>
-                                <span>Título</span>
-                                <input type="text" id="material-title" required>
-                            </label>
-
-                            <label>
-                                <span>Categoria</span>
-                                <select id="material-category" required>
-                                    <option value="slides">Slides</option>
-                                    <option value="exercicios">Exercícios</option>
-                                    <option value="provas">Provas</option>
-                                    <option value="meus-slides">Meus Slides</option>
-                                    <option value="livros">Livros</option>
-                                    <option value="youtube">YouTube</option>
-                                </select>
-                            </label>
-
-                            <label>
-                                <span>Descrição</span>
-                                <textarea id="material-description" rows="4" required></textarea>
-                            </label>
-
-                            <div class="form-columns">
                                 <label>
-                                    <span>Arquivo do site ou link público</span>
-                                    <input type="text" id="material-href" placeholder="../slides/exemplo.pdf ou https://..." required>
+                                    <span>Título</span>
+                                    <input type="text" id="material-title" required>
                                 </label>
-                            </div>
 
-                            <div class="file-field-meta">
-                                <p class="form-helper" id="material-file-status">Use um caminho do repositório ou um link público para funcionar no GitHub Pages.</p>
-                            </div>
+                                <label>
+                                    <span>Categoria</span>
+                                    <select id="material-category" required>
+                                        <option value="slides">Slides</option>
+                                        <option value="exercicios">Exercícios</option>
+                                        <option value="provas">Provas</option>
+                                        <option value="meus-slides">Meus Slides</option>
+                                        <option value="livros">Livros</option>
+                                        <option value="youtube">YouTube</option>
+                                    </select>
+                                </label>
 
-                            <p class="form-helper">Exemplo para arquivo do site: <code>../slides/calculo/aula01.pdf</code>.</p>
-                            <p class="form-helper">Exemplo para link público: <code>https://...</code>.</p>
+                                <label>
+                                    <span>Descrição</span>
+                                    <textarea id="material-description" rows="4" required></textarea>
+                                </label>
 
-                            <label>
-                                <span>Texto do botão</span>
-                                <input type="text" id="material-action-label" placeholder="Abrir">
-                            </label>
+                                <div class="form-columns form-columns-stack-mobile">
+                                    <label>
+                                        <span>Arquivo para publicar</span>
+                                        <input type="file" id="material-file" accept=".pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.zip,.rar,.7z,.txt,.png,.jpg,.jpeg,.webp">
+                                    </label>
 
-                            <div class="form-actions">
-                                <button class="btn btn-primary" type="submit">Salvar material</button>
-                                <button class="btn btn-secondary" type="button" id="material-cancel">Cancelar edição</button>
-                            </div>
+                                    <label>
+                                        <span>Link público (opcional)</span>
+                                        <input type="text" id="material-href" placeholder="https://...">
+                                    </label>
+                                </div>
+
+                                <div class="file-field-meta">
+                                    <p class="form-helper" id="material-file-status">Envie um arquivo para publicar no repositório ou use um link público externo.</p>
+                                </div>
+
+                                <p class="form-helper">Se você selecionar um arquivo, ele será enviado para a pasta <code>uploads/</code> do repositório e ficará acessível para todo mundo no site.</p>
+                                <p class="form-helper">Se preferir não enviar arquivo, você pode informar apenas um link público em <code>https://...</code>.</p>
+
+                                <label>
+                                    <span>Texto do botão</span>
+                                    <input type="text" id="material-action-label" placeholder="Abrir">
+                                </label>
+
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" type="submit">Salvar material</button>
+                                    <button class="btn btn-secondary" type="button" id="material-cancel">Cancelar edição</button>
+                                </div>
                             </form>
                         </section>
 
@@ -172,62 +220,62 @@
                                 </div>
                             </div>
 
-                        <form id="calendar-form" class="admin-form">
-                            <input type="hidden" id="calendar-id">
-
-                            <label>
-                                <span>Título</span>
-                                <input type="text" id="calendar-title" required>
-                            </label>
-
-                            <div class="form-columns">
-                                <label>
-                                    <span>Tipo</span>
-                                    <select id="calendar-type" required>
-                                        <option value="prova">Prova</option>
-                                        <option value="trabalho">Trabalho</option>
-                                        <option value="lista">Lista</option>
-                                        <option value="aula">Aula</option>
-                                        <option value="lembrete">Lembrete</option>
-                                    </select>
-                                </label>
+                            <form id="calendar-form" class="admin-form">
+                                <input type="hidden" id="calendar-id">
 
                                 <label>
-                                    <span>Área</span>
-                                    <select id="calendar-subject" required>
-                                        <option value="calculo">Cálculo</option>
-                                        <option value="fisica">Física</option>
-                                        <option value="programacao">Programação C</option>
-                                        <option value="geral">Geral</option>
-                                    </select>
+                                    <span>Título</span>
+                                    <input type="text" id="calendar-title" required>
                                 </label>
-                            </div>
 
-                            <div class="form-columns">
+                                <div class="form-columns">
+                                    <label>
+                                        <span>Tipo</span>
+                                        <select id="calendar-type" required>
+                                            <option value="prova">Prova</option>
+                                            <option value="trabalho">Trabalho</option>
+                                            <option value="lista">Lista</option>
+                                            <option value="aula">Aula</option>
+                                            <option value="lembrete">Lembrete</option>
+                                        </select>
+                                    </label>
+
+                                    <label>
+                                        <span>Área</span>
+                                        <select id="calendar-subject" required>
+                                            <option value="calculo">Cálculo</option>
+                                            <option value="fisica">Física</option>
+                                            <option value="programacao">Programação C</option>
+                                            <option value="geral">Geral</option>
+                                        </select>
+                                    </label>
+                                </div>
+
+                                <div class="form-columns">
+                                    <label>
+                                        <span>Data</span>
+                                        <input type="date" id="calendar-date" required>
+                                    </label>
+
+                                    <label>
+                                        <span>Hora</span>
+                                        <input type="time" id="calendar-time">
+                                    </label>
+                                </div>
+
                                 <label>
-                                    <span>Data</span>
-                                    <input type="date" id="calendar-date" required>
+                                    <span>Descrição</span>
+                                    <textarea id="calendar-description" rows="4"></textarea>
                                 </label>
 
-                                <label>
-                                    <span>Hora</span>
-                                    <input type="time" id="calendar-time">
-                                </label>
-                            </div>
-
-                            <label>
-                                <span>Descrição</span>
-                                <textarea id="calendar-description" rows="4"></textarea>
-                            </label>
-
-                            <div class="form-actions">
-                                <button class="btn btn-primary" type="submit">Salvar evento</button>
-                                <button class="btn btn-secondary" type="button" id="calendar-cancel">Cancelar edição</button>
-                            </div>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" type="submit">Salvar evento</button>
+                                    <button class="btn btn-secondary" type="button" id="calendar-cancel">Cancelar edição</button>
+                                </div>
                             </form>
                         </section>
 
-                        <section class="admin-card">
+                        <section class="admin-card admin-card-calendar">
                             <div class="admin-card-header admin-card-header-split">
                                 <div>
                                     <p class="mono-text">Calendário do mês</p>
@@ -240,16 +288,18 @@
                                 </div>
                             </div>
 
-                            <div class="calendar-weekdays">
-                                <span>Dom</span>
-                                <span>Seg</span>
-                                <span>Ter</span>
-                                <span>Qua</span>
-                                <span>Qui</span>
-                                <span>Sex</span>
-                                <span>Sáb</span>
+                            <div class="calendar-shell-scroll">
+                                <div class="calendar-weekdays">
+                                    <span>Dom</span>
+                                    <span>Seg</span>
+                                    <span>Ter</span>
+                                    <span>Qua</span>
+                                    <span>Qui</span>
+                                    <span>Sex</span>
+                                    <span>Sáb</span>
+                                </div>
+                                <div id="calendar-grid" class="calendar-grid"></div>
                             </div>
-                            <div id="calendar-grid" class="calendar-grid"></div>
                         </section>
                     </div>
 
@@ -275,6 +325,7 @@
                     <div class="logo footer-logo">LEVY<span>.dev</span></div>
                     <p class="footer-text">Estudante de Engenharia da Computação @ UFC.<br>Desenvolvendo soluções entre o hardware e o software.</p>
                 </div>
+
                 <div class="footer-nav">
                     <h4>Navegação</h4>
                     <ul>
@@ -283,11 +334,13 @@
                         <li><a href="../index.html#arcade">Área de Lazer</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-contact">
                     <h4>Contato</h4>
                     <p class="footer-text footer-contact-text">Sobral, Ceará - Brasil<br>contato@levy.dev</p>
                 </div>
             </div>
+
             <div class="footer-bottom">
                 <p class="footer-copy">&copy; 2026 Levy Oliveira | Engenharia da Computação</p>
                 <div class="social">
@@ -299,6 +352,7 @@
 
     <script src="../js/site-core.js"></script>
     <script src="../js/site-data.js"></script>
+    <script src="../js/github-publisher.js"></script>
     <script src="../js/admin.js"></script>
 </body>
 

@@ -51,6 +51,19 @@ const globalNavMenu = document.getElementById("nav-menu");
 const globalHeader = document.getElementById("header");
 const globalNavActions = document.querySelector(".nav-actions");
 
+function setNavMenuState(isOpen) {
+    if (!globalNavMenu) {
+        return;
+    }
+
+    globalNavMenu.classList.toggle("active", isOpen);
+    document.body.classList.toggle("nav-open", isOpen);
+
+    if (globalMenuToggle) {
+        globalMenuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    }
+}
+
 function getAdminShortcutHref() {
     const normalizedPath = window.location.pathname.replace(/\\/g, "/");
     return normalizedPath.includes("/paginas/") ? "admin.html" : "paginas/admin.html";
@@ -78,16 +91,33 @@ function ensureAdminShortcut() {
 
 if (globalMenuToggle && globalNavMenu) {
     globalMenuToggle.addEventListener("click", () => {
-        globalNavMenu.classList.toggle("active");
+        setNavMenuState(!globalNavMenu.classList.contains("active"));
     });
 }
 
 document.querySelectorAll(".nav-links a").forEach((link) => {
     link.addEventListener("click", () => {
-        if (globalNavMenu) {
-            globalNavMenu.classList.remove("active");
-        }
+        setNavMenuState(false);
     });
+});
+
+document.addEventListener("click", (event) => {
+    if (!globalNavMenu || !globalMenuToggle || window.innerWidth > 768) {
+        return;
+    }
+
+    const clickedInsideMenu = globalNavMenu.contains(event.target);
+    const clickedToggle = globalMenuToggle.contains(event.target);
+
+    if (!clickedInsideMenu && !clickedToggle) {
+        setNavMenuState(false);
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        setNavMenuState(false);
+    }
 });
 
 document.querySelectorAll('.social a[href="#header"], .back-to-top').forEach((link) => {
@@ -107,6 +137,11 @@ function updateShellScrollState() {
 }
 
 window.addEventListener("scroll", updateShellScrollState);
+window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) {
+        setNavMenuState(false);
+    }
+});
 updateShellScrollState();
 ensureAdminShortcut();
 

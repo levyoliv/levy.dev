@@ -117,6 +117,13 @@ main {
     border-radius: 4px;
 }
 
+.phys-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
 .physics-item:hover {
     background: rgba(0, 255, 136, 0.05);
     transform: translateX(-8px);
@@ -263,6 +270,10 @@ body[data-theme="light"] .interactive-box {
         padding: 130px 0 40px 0;
     }
 
+    .physics-decor-bg {
+        display: none;
+    }
+
     .section-padding {
         padding: 0 0 4rem 0;
     }
@@ -274,8 +285,17 @@ body[data-theme="light"] .interactive-box {
 
     .physics-item {
         flex-direction: column;
-        text-align: center;
+        align-items: flex-start;
         gap: 1.5rem;
+    }
+
+    .phys-actions,
+    .btn-sm {
+        width: 100%;
+    }
+
+    .btn-sm {
+        text-align: center;
     }
 
     .footer-bottom {

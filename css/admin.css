@@ -67,6 +67,52 @@
     margin-bottom: 3rem;
 }
 
+.admin-publish-shell {
+    margin-bottom: 1.5rem;
+}
+
+.admin-publish-card {
+    padding: 1.25rem 1.5rem;
+}
+
+.admin-publish-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.admin-publish-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid rgba(79, 70, 229, 0.2);
+    background: rgba(79, 70, 229, 0.12);
+    color: #c7d2fe;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.admin-advanced-settings {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-advanced-settings summary {
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-main);
+}
+
+.admin-advanced-settings[open] summary {
+    margin-bottom: 1rem;
+}
+
 .admin-title {
     font-size: clamp(2.4rem, 6vw, 4rem);
     line-height: 1.05;
@@ -120,12 +166,12 @@
 
 .admin-grid {
     display: grid;
-    grid-template-columns: minmax(320px, 420px) 1fr;
+    grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
     gap: 1.5rem;
 }
 
 .admin-grid-calendar {
-    grid-template-columns: minmax(320px, 420px) 1fr;
+    grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
 }
 
 .admin-card {
@@ -325,6 +371,12 @@
     display: flex;
     align-items: center;
     gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.calendar-shell-scroll {
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
 }
 
 .calendar-weekdays {
@@ -341,6 +393,11 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 0.65rem;
+}
+
+.calendar-weekdays,
+.calendar-grid {
+    min-width: 640px;
 }
 
 .calendar-day {
@@ -397,7 +454,8 @@
 body[data-theme="light"] .admin-login-card,
 body[data-theme="light"] .admin-card,
 body[data-theme="light"] .admin-item,
-body[data-theme="light"] .calendar-day {
+body[data-theme="light"] .calendar-day,
+body[data-theme="light"] .admin-advanced-settings {
     background: rgba(255, 255, 255, 0.92);
     border-color: rgba(148, 163, 184, 0.22);
     box-shadow: 0 18px 40px rgba(148, 163, 184, 0.08);
@@ -432,7 +490,8 @@ body[data-theme="light"] .admin-form textarea::placeholder {
 
 body[data-theme="light"] .admin-badge,
 body[data-theme="light"] .calendar-day-pill,
-body[data-theme="light"] .admin-security-pill {
+body[data-theme="light"] .admin-security-pill,
+body[data-theme="light"] .admin-publish-pill {
     background: rgba(79, 70, 229, 0.12);
     color: #3730a3;
 }
@@ -451,12 +510,22 @@ body[data-theme="light"] .empty-admin-state {
         align-items: flex-start;
         flex-direction: column;
     }
+
+    .admin-publish-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 @media (max-width: 768px) {
     .admin-auth-shell,
     .admin-main {
         padding-top: 7.5rem;
+    }
+
+    .admin-card,
+    .admin-login-card {
+        padding: 1.25rem;
     }
 
     .form-columns {
@@ -477,10 +546,52 @@ body[data-theme="light"] .empty-admin-state {
         padding: 0.55rem;
     }
 
+    .admin-card-header-split {
+        align-items: flex-start;
+    }
+
+    .calendar-nav {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .calendar-nav strong {
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+    }
+
     .admin-hero-actions .btn,
     .form-actions .btn,
     .admin-login-form .btn {
         width: 100%;
         margin-right: 0;
+    }
+}
+
+@media (max-width: 540px) {
+    .admin-auth-shell,
+    .admin-main {
+        padding-top: 7rem;
+        padding-bottom: 3rem;
+    }
+
+    .admin-title {
+        font-size: 2rem;
+    }
+
+    .admin-subtitle {
+        font-size: 0.98rem;
+    }
+
+    .admin-item-top,
+    .admin-item-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .calendar-weekdays,
+    .calendar-grid {
+        min-width: 560px;
     }
 }

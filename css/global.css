@@ -29,6 +29,10 @@ body {
     overflow-x: hidden;
 }
 
+body.nav-open {
+    overflow: hidden;
+}
+
 body[data-theme="light"] {
     --bg-color: #f4f7fb;
     --card-bg: #ffffff;
@@ -446,6 +450,7 @@ nav {
 .showcase-carousel {
     position: relative;
     min-height: 360px;
+    transition: height 0.3s ease;
 }
 
 .showcase-slide {
@@ -657,6 +662,7 @@ nav {
     border-radius: 24px;
     background: var(--surface-medium);
     border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow-x: auto;
 }
 
 .agenda-weekdays {
@@ -667,12 +673,14 @@ nav {
     color: var(--text-dim);
     font-size: 0.85rem;
     text-align: center;
+    min-width: 680px;
 }
 
 .agenda-calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 0.75rem;
+    min-width: 680px;
 }
 
 .agenda-calendar-day {
@@ -952,7 +960,7 @@ nav {
 
 .grid-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     gap: 1.75rem;
 }
 
@@ -1204,14 +1212,17 @@ body[data-theme="light"] .arcade-dodge-wrap {
         right: -100%;
         top: 0;
         background: var(--card-bg);
-        width: min(78vw, 320px);
+        width: min(88vw, 340px);
         height: 100vh;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 7rem 1.5rem 2rem;
+        gap: 1.25rem;
         transition: 0.5s ease;
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
         margin-left: 0;
+        overflow-y: auto;
     }
 
     .nav-links.active {
@@ -1293,7 +1304,7 @@ body[data-theme="light"] .arcade-dodge-wrap {
     }
 
     .showcase-carousel {
-        min-height: 440px;
+        min-height: 0;
     }
 
     .showcase-slide {
@@ -1329,5 +1340,35 @@ body[data-theme="light"] .arcade-dodge-wrap {
 
     .social {
         margin-top: 10px;
+    }
+}
+
+@media (max-width: 540px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .showcase-shell,
+    .agenda-shell,
+    .arcade-shell {
+        padding: 1.25rem;
+    }
+
+    .showcase-slide {
+        padding: 1.25rem;
+    }
+
+    .carousel-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .agenda-weekdays,
+    .agenda-calendar-grid {
+        min-width: 560px;
+    }
+
+    .card {
+        padding: 1.5rem;
     }
 }
