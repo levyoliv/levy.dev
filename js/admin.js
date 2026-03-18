@@ -4,7 +4,7 @@
     }
 
     const ADMIN_SESSION_KEY = "levy-admin-session-v1";
-    const MAX_UPLOAD_SIZE = 25 * 1024 * 1024;
+    const MAX_UPLOAD_SIZE = window.GitHubPublisher.MAX_UPLOAD_SIZE || (100 * 1024 * 1024);
     const ADMIN_CREDENTIALS = Object.freeze({
         username: "adminufclevy",
         password: "levy2026ufc"
@@ -200,6 +200,14 @@
         return `${converted.toFixed(converted >= 10 || index === 0 ? 0 : 1)} ${units[index]}`;
     }
 
+    function getUploadLimitMessage() {
+        return `Arquivo muito grande. O limite deste admin e ${formatBytes(MAX_UPLOAD_SIZE)} por arquivo. Para materiais maiores, use um link publico externo.`;
+    }
+
+    function getDefaultUploadMessage() {
+        return `Envie um arquivo para publicar no repositorio ou use um link publico externo. Limite do admin: ${formatBytes(MAX_UPLOAD_SIZE)} por arquivo.`;
+    }
+
     function sanitizeFileName(fileName) {
         const normalized = String(fileName || "")
             .normalize("NFD")
@@ -261,7 +269,7 @@
 
         if (selectedFile) {
             if (selectedFile.size > MAX_UPLOAD_SIZE) {
-                setFileStatus(`Arquivo muito grande. Limite recomendado: ${formatBytes(MAX_UPLOAD_SIZE)}.`, "error");
+                setFileStatus(getUploadLimitMessage(), "error");
                 return;
             }
 
@@ -284,7 +292,7 @@
             return;
         }
 
-        setFileStatus("Envie um arquivo para publicar no repositório ou use um link público externo.", "");
+        setFileStatus(getDefaultUploadMessage(), "");
     }
 
     function resetMaterialForm() {
@@ -535,7 +543,7 @@
         }
 
         if (selectedFile && selectedFile.size > MAX_UPLOAD_SIZE) {
-            setFileStatus(`Arquivo muito grande. Limite recomendado: ${formatBytes(MAX_UPLOAD_SIZE)}.`, "error");
+            setFileStatus(getUploadLimitMessage(), "error");
             return;
         }
 
