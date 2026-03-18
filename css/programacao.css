@@ -142,6 +142,13 @@ main {
     transition: 0.3s;
 }
 
+.c-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
 .c-item:hover {
     background: var(--c-bg-glow);
     transform: scale(1.01);
@@ -325,6 +332,10 @@ pre {
         padding: 130px 0 40px 0;
     }
 
+    .c-decor-bg {
+        display: none;
+    }
+
     .terminal-body {
         padding: 1.5rem;
     }
@@ -341,8 +352,17 @@ pre {
 
     .c-item {
         flex-direction: column;
-        text-align: center;
+        align-items: flex-start;
         gap: 1rem;
+    }
+
+    .c-actions,
+    .btn-sm {
+        width: 100%;
+    }
+
+    .btn-sm {
+        text-align: center;
     }
 
     .footer-bottom {

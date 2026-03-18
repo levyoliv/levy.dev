@@ -145,7 +145,9 @@ function initCanvas() {
 
     particles = [];
 
-    for (let index = 0; index < 80; index++) {
+    const particleCount = window.innerWidth <= 768 ? 36 : 80;
+
+    for (let index = 0; index < particleCount; index++) {
         particles.push(new Particle());
     }
 }
@@ -191,14 +193,19 @@ window.addEventListener("scroll", () => {
     }
 });
 
-const cursor = document.createElement("div");
-cursor.classList.add("custom-cursor-dot");
-document.body.appendChild(cursor);
+const shouldUseCustomCursor = window.matchMedia("(pointer: fine)").matches;
+let cursor = null;
 
-document.addEventListener("mousemove", (event) => {
-    cursor.style.left = `${event.clientX}px`;
-    cursor.style.top = `${event.clientY}px`;
-});
+if (shouldUseCustomCursor) {
+    cursor = document.createElement("div");
+    cursor.classList.add("custom-cursor-dot");
+    document.body.appendChild(cursor);
+
+    document.addEventListener("mousemove", (event) => {
+        cursor.style.left = `${event.clientX}px`;
+        cursor.style.top = `${event.clientY}px`;
+    });
+}
 
 const stackFilters = document.querySelectorAll(".stack-filter");
 const stackCards = document.querySelectorAll("[data-stack-item]");

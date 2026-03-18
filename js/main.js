@@ -7,6 +7,7 @@ const ctx = canvas ? canvas.getContext("2d") : null;
 const letters = "01010101<>/{}[]#$LEVY_COMP_ENG_2026*&%+";
 const fontSize = 16;
 let drops = [];
+let syncHomeCarouselHeight = () => {};
 
 function resizeCanvas() {
     if (!canvas) {
@@ -173,6 +174,21 @@ if (isHomePage) {
     const agendaNextMonth = document.getElementById("agenda-next-month");
     const agendaViewButtons = Array.from(document.querySelectorAll("[data-agenda-view]"));
     const agendaPanels = Array.from(document.querySelectorAll("[data-agenda-panel]"));
+
+    syncHomeCarouselHeight = () => {
+        const homeCarousel = document.getElementById("home-carousel");
+        const carouselSlides = Array.from(document.querySelectorAll("[data-slide]"));
+
+        if (!homeCarousel || carouselSlides.length === 0) {
+            return;
+        }
+
+        const maxHeight = carouselSlides.reduce((largestHeight, slide) => {
+            return Math.max(largestHeight, slide.scrollHeight);
+        }, 0);
+
+        homeCarousel.style.height = `${Math.max(maxHeight, 320)}px`;
+    };
 
     function formatHomeEvent(event) {
         const date = new Date(`${event.date}T${event.time || "00:00"}`);
@@ -348,6 +364,7 @@ if (isHomePage) {
         renderAgendaList(upcomingEvents);
         renderAgendaTimeline(visibleTimeline);
         renderAgendaCalendar(allEvents);
+        window.requestAnimationFrame(syncHomeCarouselHeight);
     }
 
     agendaViewButtons.forEach((button) => {
@@ -422,6 +439,7 @@ if (isHomePage) {
 
     if (slides.length > 0) {
         renderCarousel(activeSlide);
+        syncHomeCarouselHeight();
         startAutoplay();
     }
 
@@ -1078,4 +1096,5 @@ window.addEventListener("resize", () => {
     resizeCanvas();
     initializeDrops();
     updateScrollVisuals();
+    syncHomeCarouselHeight();
 });
