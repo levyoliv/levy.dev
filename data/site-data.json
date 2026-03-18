@@ -18,5 +18,15 @@
     "fisica": [],
     "programacao": []
   },
-  "calendar": []
+  "calendar": [
+    {
+      "id": "event-2cc1ad70-922f-4812-84fe-9840a75018e8",
+      "title": "teste",
+      "type": "prova",
+      "subject": "calculo",
+      "date": "2026-03-31",
+      "time": "11:00",
+      "description": "teste"
+    }
+  ]
 }
