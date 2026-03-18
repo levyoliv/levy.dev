@@ -1,20 +1,7 @@
 {
   "version": 2,
   "subjects": {
-    "calculo": [
-      {
-        "id": "calculo-9d0b6145-0ee4-42d5-9829-afe4cf43ab6d",
-        "category": "slides",
-        "title": "teste",
-        "description": "teste",
-        "href": "../uploads/calculo/calculo-9d0b6145-0ee4-42d5-9829-afe4cf43ab6d/PARNASIANISMO.pptx",
-        "actionLabel": "Abrir",
-        "filePath": "uploads/calculo/calculo-9d0b6145-0ee4-42d5-9829-afe4cf43ab6d/PARNASIANISMO.pptx",
-        "fileName": "PARNASIANISMO.pptx",
-        "fileType": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "fileSize": 4909417
-      }
-    ],
+    "calculo": [],
     "fisica": [],
     "programacao": []
   },
