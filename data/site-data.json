@@ -13,6 +13,18 @@
         "fileName": "",
         "fileType": "",
         "fileSize": 0
+      },
+      {
+        "id": "calculo-1dc320c8-cbed-4f29-b603-54bbc1996cae",
+        "category": "livros",
+        "title": "Cálculo - James Stewart (Vol. 1)",
+        "description": "Um guia essencial com linguagem clara e exercícios práticos para dominar a base do Cálculo.",
+        "href": "https://drive.google.com/file/d/1-rY8FYQMqUfN0wo4SYndVPb2LFG6Hmuu/view?usp=drive_link",
+        "actionLabel": "Abrir",
+        "filePath": "",
+        "fileName": "",
+        "fileType": "",
+        "fileSize": 0
       }
     ],
     "fisica": [],
