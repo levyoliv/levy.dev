@@ -1,6 +1,7 @@
 (function () {
     const CONFIG_STORAGE_KEY = "levy-github-publisher-config-v1";
     const TOKEN_STORAGE_KEY = "levy-github-publisher-token-v1";
+    const MAX_UPLOAD_SIZE = 100 * 1024 * 1024;
 
     function cloneConfig(config) {
         return {
@@ -165,6 +166,10 @@
     }
 
     async function uploadBinaryFile(repoPath, file, config, message) {
+        if (Number(file?.size || 0) > MAX_UPLOAD_SIZE) {
+            throw new Error("O GitHub aceita ate 100 MB por arquivo neste admin. Para arquivos maiores, use um link publico externo.");
+        }
+
         const contentBase64 = arrayBufferToBase64(await file.arrayBuffer());
         return upsertContentFile(repoPath, contentBase64, config, message);
     }
@@ -204,6 +209,7 @@
         clearToken,
         validateConfig,
         getFileInfo,
+        MAX_UPLOAD_SIZE,
         uploadTextFile,
         uploadBinaryFile,
         deleteFile,
