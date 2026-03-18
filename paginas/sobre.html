@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Mim | LEVY.dev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/sobre.css">
+</head>
+
+<body class="custom-cursor">
+    <canvas id="hero-canvas"></canvas>
+
+    <header id="header">
+        <nav class="container">
+            <div class="logo">LEVY<span>.dev</span></div>
+
+            <ul class="nav-links" id="nav-menu">
+                <li><a href="../index.html">Início</a></li>
+                <li><a href="calculo.html">Cálculo</a></li>
+                <li><a href="fisica.html">Física</a></li>
+                <li><a href="programacao-c.html">Programação C</a></li>
+                <li><a href="sobre.html" class="active">Sobre</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" type="button" data-theme-toggle aria-label="Alternar tema">
+                    <span class="theme-toggle-icon">☀</span>
+                    <span class="theme-toggle-text">Modo Claro</span>
+                </button>
+
+                <div class="menu-icon" id="menu-toggle">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-about container" id="sobre-topo">
+            <div class="hero-info reveal">
+                <p class="mono-text" id="typewriter-prefix">Quem sou eu</p>
+                <h1 class="hero-name">Levy Oliveira</h1>
+                <div class="typing-container">
+                    <span id="typing-text"></span><span class="cursor">|</span>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span>UFC</span>
+                        <p>Engenharia da Computação</p>
+                    </div>
+                    <div class="stat-item">
+                        <span>1</span>
+                        <p>Projeto em andamento</p>
+                    </div>
+                </div>
+                <div class="quick-links">
+                    <a href="#bio" class="quick-link">Sobre</a>
+                    <a href="#projeto" class="quick-link">Projeto atual</a>
+                    <a href="#contato" class="quick-link">Contato</a>
+                </div>
+            </div>
+
+            <div class="profile-container reveal" data-tilt>
+                <div class="profile-glow"></div>
+                <img src="../imagens/perfil.jpeg" alt="Levy Oliveira" class="profile-img">
+                <div class="profile-border"></div>
+            </div>
+        </section>
+
+        <section class="container section-padding" id="bio">
+            <div class="glass-card about-simple-card reveal">
+                <div class="bio-text">
+                    <h2 class="section-title-left">Sobre mim</h2>
+                    <p>Sou Levy Oliveira e atualmente curso <span>Engenharia da Computação</span> na UFC, em Sobral.</p>
+                    <p>Criei este site para organizar meus materiais, acompanhar provas e trabalhos e deixar meus estudos mais simples no dia a dia.</p>
+                </div>
+
+                <div class="about-summary-card">
+                    <h3>Resumo rápido</h3>
+                    <ul class="about-summary-list">
+                        <li>Universidade: UFC</li>
+                        <li>Curso: Engenharia da Computação</li>
+                        <li>Foco atual: estudos e organização acadêmica</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="container section-padding" id="projeto">
+            <div class="glass-card project-simple-card reveal">
+                <div>
+                    <p class="mono-text">Projeto atual</p>
+                    <h2 class="section-title-left">Este site</h2>
+                    <p>No momento, o principal projeto que estou desenvolvendo é este portal de estudos.</p>
+                    <p>Ele reúne materiais de Cálculo, Física e Programação C, além de agenda, destaques e uma área de lazer para deixar tudo em um lugar só.</p>
+                </div>
+
+                <div class="project-highlight-card">
+                    <h3>O que ele faz hoje</h3>
+                    <ul class="about-summary-list">
+                        <li>Centraliza materiais por disciplina</li>
+                        <li>Ajuda a acompanhar provas e trabalhos</li>
+                        <li>Deixa a rotina de estudo mais organizada</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="container section-padding" id="contato">
+            <div class="contact-panel reveal">
+                <div>
+                    <p class="mono-text">Contato</p>
+                    <h2 class="section-title-left">Fale comigo</h2>
+                    <p class="contact-copy">Se quiser entrar em contato, este é meu e-mail principal.</p>
+                </div>
+                <div class="contact-actions">
+                    <a href="mailto:contato@levy.dev" class="btn btn-primary">Enviar e-mail</a>
+                    <button class="btn btn-secondary" id="copy-email-btn" type="button" data-email="contato@levy.dev">Copiar e-mail</button>
+                </div>
+                <p class="copy-feedback" id="copy-feedback" aria-live="polite"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="divider"></div>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo footer-logo">LEVY<span>.dev</span></div>
+                    <p class="footer-text">Estudante de Engenharia da Computação @ UFC.<br>Desenvolvendo soluções entre o hardware e o software.</p>
+                </div>
+                <div class="footer-nav">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="sobre.html">Sobre Mim</a></li>
+                        <li><a href="../index.html#estudos">Estudos</a></li>
+                        <li><a href="../index.html#arcade">Área de Lazer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contato</h4>
+                    <p class="footer-text footer-contact-text">Sobral, Ceará - Brasil<br>contato@levy.dev</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copy">&copy; 2026 Levy Oliveira | Engenharia da Computação</p>
+                <div class="social">
+                    <a href="#header" class="back-to-top">voltar_ao_topo();</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/site-core.js"></script>
+    <script src="../js/sobre.js"></script>
+</body>
+
+</html>

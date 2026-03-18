@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Levy.dev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body class="admin-page">
+    <header id="header">
+        <nav class="container">
+            <div class="logo">LEVY<span>.dev</span></div>
+
+            <ul class="nav-links" id="nav-menu">
+                <li><a href="../index.html">Início</a></li>
+                <li><a href="calculo.html">Cálculo</a></li>
+                <li><a href="fisica.html">Física</a></li>
+                <li><a href="programacao-c.html">Programação C</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" type="button" data-theme-toggle aria-label="Alternar tema">
+                    <span class="theme-toggle-icon">☀</span>
+                    <span class="theme-toggle-text">Modo Claro</span>
+                </button>
+
+                <button class="admin-session-btn" id="admin-logout" type="button" hidden>Sair</button>
+
+                <div class="menu-icon" id="menu-toggle">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="container admin-auth-shell" id="admin-auth-shell">
+            <div class="admin-login-card">
+                <p class="mono-text">Acesso restrito</p>
+                <h1 class="admin-title">Entrar no admin</h1>
+                <p class="admin-subtitle">Faça login para gerenciar agenda, materiais e links do site.</p>
+
+                <form id="admin-login-form" class="admin-form admin-login-form">
+                    <label>
+                        <span>Usuário</span>
+                        <input type="text" id="admin-login-user" autocomplete="username" required>
+                    </label>
+
+                    <label>
+                        <span>Senha</span>
+                        <input type="password" id="admin-login-password" autocomplete="current-password" required>
+                    </label>
+
+                    <p class="admin-login-feedback" id="admin-login-feedback" aria-live="polite"></p>
+
+                    <button class="btn btn-primary" type="submit">Entrar no admin</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="container admin-main" id="admin-main" hidden>
+            <section class="admin-hero">
+                <p class="mono-text">Área administrativa</p>
+                <h1 class="admin-title">Gerenciar conteúdos</h1>
+                <p class="admin-subtitle">Cadastre materiais por disciplina, organize provas e trabalhos e use caminhos do repositório ou links públicos.</p>
+                <div class="admin-hero-actions">
+                    <a href="../index.html#agenda" class="btn btn-primary">Ver agenda pública</a>
+                    <a href="../index.html#destaques" class="btn btn-secondary">Voltar aos destaques</a>
+                    <span class="admin-security-pill">Acesso restrito</span>
+                </div>
+            </section>
+
+            <section class="admin-tabs-shell">
+                <div class="admin-tabs" role="tablist" aria-label="Seções do painel">
+                    <button class="admin-tab active" type="button" data-admin-tab="calculo">Cálculo</button>
+                    <button class="admin-tab" type="button" data-admin-tab="fisica">Física</button>
+                    <button class="admin-tab" type="button" data-admin-tab="programacao">Programação C</button>
+                    <button class="admin-tab" type="button" data-admin-tab="calendar">Calendário</button>
+                </div>
+
+                <div class="admin-panel active" id="materials-admin">
+                    <div class="admin-grid">
+                        <section class="admin-card">
+                            <div class="admin-card-header">
+                                <div>
+                                    <p class="mono-text" id="subject-form-prefix">Materiais da disciplina</p>
+                                    <h2 id="subject-form-title">Gerenciar materiais</h2>
+                                </div>
+                            </div>
+
+                            <form id="material-form" class="admin-form">
+                                <input type="hidden" id="material-id">
+
+                            <label>
+                                <span>Título</span>
+                                <input type="text" id="material-title" required>
+                            </label>
+
+                            <label>
+                                <span>Categoria</span>
+                                <select id="material-category" required>
+                                    <option value="slides">Slides</option>
+                                    <option value="exercicios">Exercícios</option>
+                                    <option value="provas">Provas</option>
+                                    <option value="meus-slides">Meus Slides</option>
+                                    <option value="livros">Livros</option>
+                                    <option value="youtube">YouTube</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                <span>Descrição</span>
+                                <textarea id="material-description" rows="4" required></textarea>
+                            </label>
+
+                            <div class="form-columns">
+                                <label>
+                                    <span>Arquivo do site ou link público</span>
+                                    <input type="text" id="material-href" placeholder="../slides/exemplo.pdf ou https://..." required>
+                                </label>
+                            </div>
+
+                            <div class="file-field-meta">
+                                <p class="form-helper" id="material-file-status">Use um caminho do repositório ou um link público para funcionar no GitHub Pages.</p>
+                            </div>
+
+                            <p class="form-helper">Exemplo para arquivo do site: <code>../slides/calculo/aula01.pdf</code>.</p>
+                            <p class="form-helper">Exemplo para link público: <code>https://...</code>.</p>
+
+                            <label>
+                                <span>Texto do botão</span>
+                                <input type="text" id="material-action-label" placeholder="Abrir">
+                            </label>
+
+                            <div class="form-actions">
+                                <button class="btn btn-primary" type="submit">Salvar material</button>
+                                <button class="btn btn-secondary" type="button" id="material-cancel">Cancelar edição</button>
+                            </div>
+                            </form>
+                        </section>
+
+                        <section class="admin-card">
+                            <div class="admin-card-header">
+                                <div>
+                                    <p class="mono-text">Lista atual</p>
+                                    <h2>Itens cadastrados</h2>
+                                </div>
+                            </div>
+                            <div id="material-list" class="admin-list"></div>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="admin-panel" id="calendar-admin">
+                    <div class="admin-grid admin-grid-calendar">
+                        <section class="admin-card">
+                            <div class="admin-card-header">
+                                <div>
+                                    <p class="mono-text">Adicionar compromisso</p>
+                                    <h2>Adicionar evento</h2>
+                                </div>
+                            </div>
+
+                        <form id="calendar-form" class="admin-form">
+                            <input type="hidden" id="calendar-id">
+
+                            <label>
+                                <span>Título</span>
+                                <input type="text" id="calendar-title" required>
+                            </label>
+
+                            <div class="form-columns">
+                                <label>
+                                    <span>Tipo</span>
+                                    <select id="calendar-type" required>
+                                        <option value="prova">Prova</option>
+                                        <option value="trabalho">Trabalho</option>
+                                        <option value="lista">Lista</option>
+                                        <option value="aula">Aula</option>
+                                        <option value="lembrete">Lembrete</option>
+                                    </select>
+                                </label>
+
+                                <label>
+                                    <span>Área</span>
+                                    <select id="calendar-subject" required>
+                                        <option value="calculo">Cálculo</option>
+                                        <option value="fisica">Física</option>
+                                        <option value="programacao">Programação C</option>
+                                        <option value="geral">Geral</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                            <div class="form-columns">
+                                <label>
+                                    <span>Data</span>
+                                    <input type="date" id="calendar-date" required>
+                                </label>
+
+                                <label>
+                                    <span>Hora</span>
+                                    <input type="time" id="calendar-time">
+                                </label>
+                            </div>
+
+                            <label>
+                                <span>Descrição</span>
+                                <textarea id="calendar-description" rows="4"></textarea>
+                            </label>
+
+                            <div class="form-actions">
+                                <button class="btn btn-primary" type="submit">Salvar evento</button>
+                                <button class="btn btn-secondary" type="button" id="calendar-cancel">Cancelar edição</button>
+                            </div>
+                            </form>
+                        </section>
+
+                        <section class="admin-card">
+                            <div class="admin-card-header admin-card-header-split">
+                                <div>
+                                    <p class="mono-text">Calendário do mês</p>
+                                    <h2>Calendário visual</h2>
+                                </div>
+                                <div class="calendar-nav">
+                                    <button class="calendar-nav-btn" type="button" id="calendar-prev-month">←</button>
+                                    <strong id="calendar-current-month"></strong>
+                                    <button class="calendar-nav-btn" type="button" id="calendar-next-month">→</button>
+                                </div>
+                            </div>
+
+                            <div class="calendar-weekdays">
+                                <span>Dom</span>
+                                <span>Seg</span>
+                                <span>Ter</span>
+                                <span>Qua</span>
+                                <span>Qui</span>
+                                <span>Sex</span>
+                                <span>Sáb</span>
+                            </div>
+                            <div id="calendar-grid" class="calendar-grid"></div>
+                        </section>
+                    </div>
+
+                    <section class="admin-card admin-card-full">
+                        <div class="admin-card-header">
+                            <div>
+                                <p class="mono-text">Próximos compromissos</p>
+                                <h2>Eventos cadastrados</h2>
+                            </div>
+                        </div>
+                        <div id="calendar-event-list" class="admin-list"></div>
+                    </section>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="divider"></div>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo footer-logo">LEVY<span>.dev</span></div>
+                    <p class="footer-text">Estudante de Engenharia da Computação @ UFC.<br>Desenvolvendo soluções entre o hardware e o software.</p>
+                </div>
+                <div class="footer-nav">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="sobre.html">Sobre Mim</a></li>
+                        <li><a href="../index.html#estudos">Estudos</a></li>
+                        <li><a href="../index.html#arcade">Área de Lazer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contato</h4>
+                    <p class="footer-text footer-contact-text">Sobral, Ceará - Brasil<br>contato@levy.dev</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copy">&copy; 2026 Levy Oliveira | Engenharia da Computação</p>
+                <div class="social">
+                    <a href="#header" class="back-to-top">voltar_ao_topo();</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/site-core.js"></script>
+    <script src="../js/site-data.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+
+</html>

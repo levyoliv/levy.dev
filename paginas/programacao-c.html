@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programação C | Levy.dev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/programacao.css">
+</head>
+
+<body data-subject="programacao">
+    <canvas id="matrix-bg"></canvas>
+
+    <div class="c-decor-bg">
+        <div class="binary-stream" style="top: 10%; left: 5%;">01100011</div>
+        <div class="binary-stream" style="bottom: 20%; right: 8%;">0x7FFE</div>
+        <span class="c-symbol" style="top: 25%; right: 12%;">{ ; }</span>
+        <span class="c-symbol" style="bottom: 10%; left: 10%;">#include</span>
+    </div>
+
+    <header id="header">
+        <nav class="container">
+            <div class="logo">LEVY<span>.dev</span></div>
+
+            <ul class="nav-links" id="nav-menu">
+                <li><a href="../index.html">Início</a></li>
+                <li><a href="calculo.html">Cálculo</a></li>
+                <li><a href="fisica.html">Física</a></li>
+                <li><a href="programacao-c.html" class="active">Programação C</a></li>
+                <li><a href="sobre.html">Sobre</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" type="button" data-theme-toggle aria-label="Alternar tema">
+                    <span class="theme-toggle-icon">☀</span>
+                    <span class="theme-toggle-text">Modo Claro</span>
+                </button>
+
+                <div class="menu-icon" id="menu-toggle">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-sub container">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                    <span class="terminal-title">levy@ufc: ~/estudos_c</span>
+                </div>
+                <div class="terminal-body">
+                    <p class="mono-text"><span>$</span> gcc main.c -o portfolio</p>
+                    <p class="mono-text"><span>$</span> ./portfolio</p>
+                    <h1 class="glitch-text">Programação C</h1>
+                    <p class="subtitle">Materiais, exercícios, provas e alguns trechos úteis de código em C.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container filter-container">
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all" type="button">Todos</button>
+                <button class="filter-btn" data-filter="slides" type="button">Materiais Aula</button>
+                <button class="filter-btn" data-filter="exercicios" type="button">Exercícios</button>
+                <button class="filter-btn" data-filter="provas" type="button">Provas</button>
+                <button class="filter-btn" data-filter="meus-slides" type="button">Meus Slides</button>
+                <button class="filter-btn" data-filter="livros" type="button">Livros</button>
+                <button class="filter-btn" data-filter="youtube" type="button">Canais YT</button>
+            </div>
+        </section>
+
+        <section class="container section-padding">
+            <div class="c-grid" id="materials-list"></div>
+        </section>
+
+        <section class="container section-padding">
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="mono-text">bubble_sort.c</span>
+                    <button class="copy-btn" type="button" onclick="copyCode('code1')">Copiar</button>
+                </div>
+                <pre><code id="code1" class="language-c"><span class="keyword">void</span> <span class="func">bubbleSort</span>(<span class="type">int</span> v[], <span class="type">int</span> n) {
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n-<span class="number">1</span>; i++)
+        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; n-i-<span class="number">1</span>; j++)
+            <span class="keyword">if</span> (v[j] &gt; v[j+<span class="number">1</span>]) <span class="func">swap</span>(&amp;v[j], &amp;v[j+<span class="number">1</span>]);
+}</code></pre>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="divider"></div>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo footer-logo">LEVY<span>.dev</span></div>
+                    <p class="footer-text">Estudante de Engenharia da Computação @ UFC.<br>Desenvolvendo soluções entre o hardware e o software.</p>
+                </div>
+                <div class="footer-nav">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="sobre.html">Sobre Mim</a></li>
+                        <li><a href="../index.html#estudos">Estudos</a></li>
+                        <li><a href="../index.html#arcade">Área de Lazer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contato</h4>
+                    <p class="footer-text footer-contact-text">Sobral, Ceará - Brasil<br>contato@levy.dev</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copy">&copy; 2026 Levy Oliveira | Engenharia da Computação</p>
+                <div class="social"><a href="#header" class="back-to-top">voltar_ao_topo();</a></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/site-core.js"></script>
+    <script src="../js/site-data.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/subject-page.js"></script>
+    <script>
+        function copyCode(id) {
+            const code = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(code);
+            alert("Código copiado!");
+        }
+    </script>
+</body>
+
+</html>
