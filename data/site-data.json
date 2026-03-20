@@ -25,6 +25,18 @@
         "fileName": "",
         "fileType": "",
         "fileSize": 0
+      },
+      {
+        "id": "calculo-32569e1b-a05c-4654-8efb-e0c55288b22f",
+        "category": "livros",
+        "title": "Cálculo - Simmons com Geometria Analitica (Vol 1)",
+        "description": "Um guia essencial com linguagem clara e exercícios práticos para dominar a base do Cálculo com Geometria Analitica",
+        "href": "https://drive.google.com/file/d/1rv9F3f7mJQvXS_rk9K3mMHjWAggLuR_c/view?usp=drive_link",
+        "actionLabel": "Ler",
+        "filePath": "",
+        "fileName": "",
+        "fileType": "",
+        "fileSize": 0
       }
     ],
     "fisica": [],
