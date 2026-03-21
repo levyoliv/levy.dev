@@ -39,7 +39,20 @@
         "fileSize": 0
       }
     ],
-    "fisica": [],
+    "fisica": [
+      {
+        "id": "fisica-0f37e545-f0b4-4b4a-9c95-0c3b5a4b5e13",
+        "category": "livros",
+        "title": "Física Halliday (Vol 1) - 9º Edição",
+        "description": "Principal livro para aprender física",
+        "href": "https://drive.google.com/file/d/1vgk9mJcOavxRzpMsmtXLh4Pkb4BTyGlE/view?usp=drive_link",
+        "actionLabel": "Ler",
+        "filePath": "",
+        "fileName": "",
+        "fileType": "",
+        "fileSize": 0
+      }
+    ],
     "programacao": []
   },
   "calendar": []
