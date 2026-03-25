@@ -253,28 +253,6 @@
         return cloneData(currentData.subjects[normalizeSubject(subject)] || []);
     }
 
-    function getRecentMaterials(limit = 4, recentWindowDays = 30) {
-        const cutoffTimestamp = Date.now() - (recentWindowDays * 24 * 60 * 60 * 1000);
-        const allItems = Object.entries(currentData.subjects).flatMap(([subject, items]) => {
-            return (Array.isArray(items) ? items : []).map((item) => ({
-                ...cloneData(item),
-                subject
-            }));
-        });
-
-        return allItems
-            .filter((item) => {
-                const materialTimestamp = new Date(item.updatedAt || item.createdAt || 0).getTime();
-                return Number.isFinite(materialTimestamp) && materialTimestamp >= cutoffTimestamp;
-            })
-            .sort((firstItem, secondItem) => {
-                const firstDate = new Date(firstItem.createdAt || firstItem.updatedAt || 0).getTime();
-                const secondDate = new Date(secondItem.createdAt || secondItem.updatedAt || 0).getTime();
-                return secondDate - firstDate;
-            })
-            .slice(0, Math.max(0, limit));
-    }
-
     function upsertSubjectItem(subject, item) {
         const normalizedSubject = normalizeSubject(subject);
         const nextData = getData();
@@ -364,7 +342,6 @@
         getData,
         setData,
         getSubjectItems,
-        getRecentMaterials,
         upsertSubjectItem,
         deleteSubjectItem,
         getCalendarEvents,

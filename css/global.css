@@ -616,10 +616,6 @@ nav {
     gap: 0.8rem;
 }
 
-.recent-material-list {
-    margin-top: 0.15rem;
-}
-
 .calendar-slide-event,
 .agenda-card {
     padding: 1.25rem;
@@ -628,17 +624,7 @@ nav {
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.recent-material-card {
-    display: grid;
-    align-content: start;
-    gap: 0.7rem;
-}
-
 .showcase-slide.calendar-slide .calendar-slide-event {
-    padding: 1rem;
-}
-
-.showcase-slide.recent-slide .recent-material-card {
     padding: 1rem;
 }
 
@@ -662,31 +648,6 @@ nav {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
-}
-
-.recent-material-card p {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-}
-
-.recent-material-card .agenda-meta {
-    margin-bottom: 0;
-}
-
-.recent-material-card-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: fit-content;
-    color: var(--text-main);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.recent-material-card-link:hover {
-    color: var(--accent-color);
 }
 
 .attachment-note {

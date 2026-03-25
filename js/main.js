@@ -151,26 +151,11 @@ if (isHomePage) {
         lembrete: "Lembrete"
     };
 
-    const materialCategoryLabels = {
-        slides: "Slides",
-        exercicios: "Exercicios",
-        provas: "Provas",
-        "meus-slides": "Meus slides",
-        livros: "Livro",
-        youtube: "YouTube"
-    };
-
     const subjectLabels = {
         calculo: "Cálculo",
         fisica: "Física",
         programacao: "Programação C",
         geral: "Geral"
-    };
-
-    const subjectPageHrefs = {
-        calculo: "paginas/calculo.html",
-        fisica: "paginas/fisica.html",
-        programacao: "paginas/programacao-c.html"
     };
 
     const agendaState = {
@@ -180,10 +165,6 @@ if (isHomePage) {
     };
 
     const highlightList = document.getElementById("calendar-highlight-list");
-    const recentMaterialsList = document.getElementById("recent-material-list");
-    const recentMaterialsSlide = document.getElementById("recent-materials-slide");
-    const recentMaterialsDot = document.getElementById("recent-materials-dot");
-    const highlightsIntro = document.getElementById("highlights-intro");
     const agendaShell = document.querySelector(".agenda-shell");
     const agendaList = document.getElementById("agenda-upcoming");
     const agendaTimeline = document.getElementById("agenda-timeline");
@@ -253,55 +234,6 @@ if (isHomePage) {
                 `;
             }).join("")
             : '<div class="agenda-empty">Nenhum evento futuro cadastrado ainda.</div>';
-    }
-
-    function toggleRecentMaterialsSlide(hasRecentMaterials) {
-        if (recentMaterialsSlide) {
-            recentMaterialsSlide.hidden = !hasRecentMaterials;
-        }
-
-        if (recentMaterialsDot) {
-            recentMaterialsDot.hidden = !hasRecentMaterials;
-        }
-
-        if (highlightsIntro) {
-            highlightsIntro.textContent = hasRecentMaterials
-                ? "Atalhos rapidos para cada disciplina, para a agenda e para o que foi adicionado por ultimo."
-                : "Atalhos rapidos para cada disciplina e para a agenda.";
-        }
-    }
-
-    function renderRecentMaterials(materials) {
-        const hasRecentMaterials = materials.length > 0;
-        toggleRecentMaterialsSlide(hasRecentMaterials);
-
-        if (!recentMaterialsList) {
-            return;
-        }
-
-        recentMaterialsList.innerHTML = hasRecentMaterials
-            ? materials.map((item) => {
-                const subjectLabel = subjectLabels[item.subject] || item.subject;
-                const categoryLabel = materialCategoryLabels[item.category] || item.category || "Material";
-                const subjectHref = subjectPageHrefs[item.subject] || "#estudos";
-                const description = item.description || `${categoryLabel} de ${subjectLabel} disponivel no acervo.`;
-
-                return `
-                    <article class="calendar-slide-event recent-material-card">
-                        <div>
-                            <strong>${escapeHtml(item.title)}</strong>
-                            <p>${escapeHtml(description)}</p>
-                        </div>
-                        <div class="agenda-meta">
-                            <span class="agenda-pill">${escapeHtml(subjectLabel)}</span>
-                            <span class="agenda-pill">${escapeHtml(categoryLabel)}</span>
-                            <span class="agenda-pill">Recente</span>
-                        </div>
-                        <a class="recent-material-card-link" href="${escapeHtml(subjectHref)}">Ver ${escapeHtml(subjectLabel)}</a>
-                    </article>
-                `;
-            }).join("")
-            : '<div class="agenda-empty">Nenhum material novo cadastrado ainda.</div>';
     }
 
     function renderAgendaList(events) {
@@ -430,10 +362,8 @@ if (isHomePage) {
         const allEvents = window.SiteData.getCalendarEvents();
         const upcomingEvents = window.SiteData.getUpcomingCalendarEvents(8);
         const visibleTimeline = upcomingEvents.length ? upcomingEvents : allEvents.slice(0, 8);
-        const recentMaterials = window.SiteData.getRecentMaterials(3);
 
         renderHighlightEvents(upcomingEvents);
-        renderRecentMaterials(recentMaterials);
         renderAgendaList(upcomingEvents);
         renderAgendaTimeline(visibleTimeline);
         renderAgendaCalendar(allEvents);
