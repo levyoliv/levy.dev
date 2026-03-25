@@ -35,11 +35,11 @@
 
                 <button class="admin-session-btn" id="admin-logout" type="button" hidden>Sair</button>
 
-                <div class="menu-icon" id="menu-toggle">
+                <button class="menu-icon" id="menu-toggle" type="button" aria-controls="nav-menu" aria-expanded="false" aria-label="Abrir menu">
                     <div class="bar"></div>
                     <div class="bar"></div>
                     <div class="bar"></div>
-                </div>
+                </button>
             </div>
         </nav>
     </header>
@@ -185,6 +185,35 @@
 
                                 <p class="form-helper">Se você selecionar um arquivo, ele será enviado para a pasta <code>uploads/</code> do repositório e ficará acessível para todo mundo no site.</p>
                                 <p class="form-helper">Para manter compatibilidade com o GitHub, este admin aceita até <code>100 MB</code> por arquivo. Acima disso, publique o material em um serviço externo e informe o link público em <code>https://...</code>.</p>
+
+                                <div class="admin-divider"></div>
+
+                                <div class="form-columns form-columns-stack-mobile">
+                                    <label>
+                                        <span>Imagem de capa (opcional)</span>
+                                        <input type="file" id="material-image-file" accept=".png,.jpg,.jpeg,.webp,.gif,.svg">
+                                    </label>
+
+                                    <label>
+                                        <span>Link da imagem (opcional)</span>
+                                        <input type="text" id="material-image-href" placeholder="https://...">
+                                    </label>
+                                </div>
+
+                                <label>
+                                    <span>Texto alternativo da imagem</span>
+                                    <input type="text" id="material-image-alt" placeholder="Ex.: Capa do livro Stewart Volume 1">
+                                </label>
+
+                                <div class="file-field-meta">
+                                    <p class="form-helper" id="material-image-status">Opcional: envie uma imagem de capa ou use um link de imagem para exibir o material com miniatura padronizada.</p>
+                                    <label class="admin-inline-toggle">
+                                        <input type="checkbox" id="material-image-remove">
+                                        <span>Remover imagem atual ao salvar</span>
+                                    </label>
+                                </div>
+
+                                <p class="form-helper">As imagens aparecem com o mesmo recorte e tamanho em todas as páginas para manter o site padronizado em celular, tablet e desktop.</p>
 
                                 <label>
                                     <span>Texto do botão</span>
@@ -337,7 +366,7 @@
 
                 <div class="footer-contact">
                     <h4>Contato</h4>
-                    <p class="footer-text footer-contact-text">Sobral, Ceará - Brasil<br>contato@levy.dev</p>
+                    <p class="footer-text footer-contact-text">Sobral, Ceará - Brasil<br>levyoliveira654@gmail.com</p>
                 </div>
             </div>
 
