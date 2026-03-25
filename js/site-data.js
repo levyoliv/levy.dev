@@ -1,7 +1,7 @@
 (function () {
-    const STORAGE_KEY = "levy-site-data-cache-v2";
+    const STORAGE_KEY = "levy-site-data-cache-v4";
     const DEFAULT_DATA = Object.freeze({
-        version: 2,
+        version: 4,
         subjects: {
             calculo: [],
             fisica: [],
@@ -42,7 +42,30 @@
         return subjectMap[String(subject || "").trim()] || "calculo";
     }
 
-    function normalizeMaterial(item, fallbackPrefix) {
+    function normalizeTimestamp(value) {
+        const normalizedValue = String(value || "").trim();
+
+        if (!normalizedValue) {
+            return "";
+        }
+
+        const parsedDate = new Date(normalizedValue);
+
+        return Number.isNaN(parsedDate.getTime()) ? "" : parsedDate.toISOString();
+    }
+
+    function buildFallbackMaterialTimestamp(subject, itemIndex) {
+        const subjectOrder = {
+            calculo: 0,
+            fisica: 1,
+            programacao: 2
+        };
+        const offset = (subjectOrder[normalizeSubject(subject)] || 0) * 200 + itemIndex;
+
+        return new Date(Date.UTC(2026, 0, 1, 12, offset, 0)).toISOString();
+    }
+
+    function normalizeMaterial(item, fallbackPrefix, fallbackTimestamp = new Date().toISOString()) {
         const category = String(item?.category || "slides").trim() || "slides";
         const title = String(item?.title || "").trim();
         const description = String(item?.description || "").trim();
@@ -52,6 +75,14 @@
         const fileName = String(item?.fileName || "").trim();
         const fileType = String(item?.fileType || "").trim();
         const fileSize = Number.isFinite(Number(item?.fileSize)) ? Number(item.fileSize) : 0;
+        const imageHref = String(item?.imageHref || "").trim();
+        const imagePath = String(item?.imagePath || "").trim();
+        const imageName = String(item?.imageName || "").trim();
+        const imageType = String(item?.imageType || "").trim();
+        const imageAlt = String(item?.imageAlt || "").trim();
+        const imageSize = Number.isFinite(Number(item?.imageSize)) ? Number(item.imageSize) : 0;
+        const createdAt = normalizeTimestamp(item?.createdAt) || normalizeTimestamp(item?.updatedAt) || fallbackTimestamp;
+        const updatedAt = normalizeTimestamp(item?.updatedAt) || createdAt;
 
         if (!title) {
             return null;
@@ -67,7 +98,15 @@
             filePath,
             fileName,
             fileType,
-            fileSize
+            fileSize,
+            imageHref,
+            imagePath,
+            imageName,
+            imageType,
+            imageAlt,
+            imageSize,
+            createdAt,
+            updatedAt
         };
     }
 
@@ -100,7 +139,7 @@
 
     function sanitizeData(data) {
         const nextData = {
-            version: 2,
+            version: 4,
             subjects: {
                 calculo: [],
                 fisica: [],
@@ -112,7 +151,7 @@
         Object.keys(nextData.subjects).forEach((subject) => {
             const sourceItems = Array.isArray(data?.subjects?.[subject]) ? data.subjects[subject] : [];
             nextData.subjects[subject] = sourceItems
-                .map((item) => normalizeMaterial(item, subject))
+                .map((item, index) => normalizeMaterial(item, subject, buildFallbackMaterialTimestamp(subject, index)))
                 .filter(Boolean);
         });
 
@@ -214,6 +253,28 @@
         return cloneData(currentData.subjects[normalizeSubject(subject)] || []);
     }
 
+    function getRecentMaterials(limit = 4, recentWindowDays = 30) {
+        const cutoffTimestamp = Date.now() - (recentWindowDays * 24 * 60 * 60 * 1000);
+        const allItems = Object.entries(currentData.subjects).flatMap(([subject, items]) => {
+            return (Array.isArray(items) ? items : []).map((item) => ({
+                ...cloneData(item),
+                subject
+            }));
+        });
+
+        return allItems
+            .filter((item) => {
+                const materialTimestamp = new Date(item.updatedAt || item.createdAt || 0).getTime();
+                return Number.isFinite(materialTimestamp) && materialTimestamp >= cutoffTimestamp;
+            })
+            .sort((firstItem, secondItem) => {
+                const firstDate = new Date(firstItem.createdAt || firstItem.updatedAt || 0).getTime();
+                const secondDate = new Date(secondItem.createdAt || secondItem.updatedAt || 0).getTime();
+                return secondDate - firstDate;
+            })
+            .slice(0, Math.max(0, limit));
+    }
+
     function upsertSubjectItem(subject, item) {
         const normalizedSubject = normalizeSubject(subject);
         const nextData = getData();
@@ -227,6 +288,8 @@
         const itemIndex = subjectItems.findIndex((currentItem) => currentItem.id === nextItem.id);
 
         if (itemIndex >= 0) {
+            nextItem.createdAt = subjectItems[itemIndex].createdAt || nextItem.createdAt;
+            nextItem.updatedAt = nextItem.updatedAt || subjectItems[itemIndex].updatedAt || nextItem.createdAt;
             subjectItems[itemIndex] = nextItem;
         } else {
             subjectItems.push(nextItem);
@@ -301,6 +364,7 @@
         getData,
         setData,
         getSubjectItems,
+        getRecentMaterials,
         upsertSubjectItem,
         deleteSubjectItem,
         getCalendarEvents,

@@ -258,6 +258,12 @@
     gap: 1rem;
 }
 
+.admin-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 0.35rem 0 0.15rem;
+}
+
 .file-field-meta {
     display: flex;
     justify-content: space-between;
@@ -281,6 +287,20 @@
 
 .form-helper.is-success {
     color: #16a34a;
+}
+
+.admin-inline-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-dim);
+    font-size: 0.88rem;
+}
+
+.admin-inline-toggle input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent-color);
 }
 
 .form-actions {
@@ -475,6 +495,10 @@ body[data-theme="light"] .admin-form select,
 body[data-theme="light"] .admin-form textarea {
     background: rgba(255, 255, 255, 0.98);
     color: var(--text-main);
+}
+
+body[data-theme="light"] .admin-divider {
+    background: rgba(148, 163, 184, 0.2);
 }
 
 body[data-theme="light"] .admin-form input[type="file"]::file-selector-button {

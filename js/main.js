@@ -151,11 +151,26 @@ if (isHomePage) {
         lembrete: "Lembrete"
     };
 
+    const materialCategoryLabels = {
+        slides: "Slides",
+        exercicios: "Exercicios",
+        provas: "Provas",
+        "meus-slides": "Meus slides",
+        livros: "Livro",
+        youtube: "YouTube"
+    };
+
     const subjectLabels = {
         calculo: "Cálculo",
         fisica: "Física",
         programacao: "Programação C",
         geral: "Geral"
+    };
+
+    const subjectPageHrefs = {
+        calculo: "paginas/calculo.html",
+        fisica: "paginas/fisica.html",
+        programacao: "paginas/programacao-c.html"
     };
 
     const agendaState = {
@@ -165,6 +180,10 @@ if (isHomePage) {
     };
 
     const highlightList = document.getElementById("calendar-highlight-list");
+    const recentMaterialsList = document.getElementById("recent-material-list");
+    const recentMaterialsSlide = document.getElementById("recent-materials-slide");
+    const recentMaterialsDot = document.getElementById("recent-materials-dot");
+    const highlightsIntro = document.getElementById("highlights-intro");
     const agendaShell = document.querySelector(".agenda-shell");
     const agendaList = document.getElementById("agenda-upcoming");
     const agendaTimeline = document.getElementById("agenda-timeline");
@@ -174,6 +193,7 @@ if (isHomePage) {
     const agendaNextMonth = document.getElementById("agenda-next-month");
     const agendaViewButtons = Array.from(document.querySelectorAll("[data-agenda-view]"));
     const agendaPanels = Array.from(document.querySelectorAll("[data-agenda-panel]"));
+    let rerenderCarousel = () => {};
 
     syncHomeCarouselHeight = () => {
         const homeCarousel = document.getElementById("home-carousel");
@@ -183,11 +203,13 @@ if (isHomePage) {
             return;
         }
 
-        const maxHeight = carouselSlides.reduce((largestHeight, slide) => {
-            return Math.max(largestHeight, slide.scrollHeight);
-        }, 0);
+        const activeSlideElement = carouselSlides.find((slide) => slide.classList.contains("active")) || carouselSlides[0];
 
-        homeCarousel.style.height = `${Math.max(maxHeight, 320)}px`;
+        if (!activeSlideElement) {
+            return;
+        }
+
+        homeCarousel.style.height = `${Math.max(activeSlideElement.scrollHeight, 0)}px`;
     };
 
     function formatHomeEvent(event) {
@@ -215,7 +237,7 @@ if (isHomePage) {
         }
 
         highlightList.innerHTML = events.length
-            ? events.slice(0, 2).map((event) => {
+            ? events.slice(0, 3).map((event) => {
                 const meta = formatHomeEvent(event);
 
                 return `
@@ -231,6 +253,55 @@ if (isHomePage) {
                 `;
             }).join("")
             : '<div class="agenda-empty">Nenhum evento futuro cadastrado ainda.</div>';
+    }
+
+    function toggleRecentMaterialsSlide(hasRecentMaterials) {
+        if (recentMaterialsSlide) {
+            recentMaterialsSlide.hidden = !hasRecentMaterials;
+        }
+
+        if (recentMaterialsDot) {
+            recentMaterialsDot.hidden = !hasRecentMaterials;
+        }
+
+        if (highlightsIntro) {
+            highlightsIntro.textContent = hasRecentMaterials
+                ? "Atalhos rapidos para cada disciplina, para a agenda e para o que foi adicionado por ultimo."
+                : "Atalhos rapidos para cada disciplina e para a agenda.";
+        }
+    }
+
+    function renderRecentMaterials(materials) {
+        const hasRecentMaterials = materials.length > 0;
+        toggleRecentMaterialsSlide(hasRecentMaterials);
+
+        if (!recentMaterialsList) {
+            return;
+        }
+
+        recentMaterialsList.innerHTML = hasRecentMaterials
+            ? materials.map((item) => {
+                const subjectLabel = subjectLabels[item.subject] || item.subject;
+                const categoryLabel = materialCategoryLabels[item.category] || item.category || "Material";
+                const subjectHref = subjectPageHrefs[item.subject] || "#estudos";
+                const description = item.description || `${categoryLabel} de ${subjectLabel} disponivel no acervo.`;
+
+                return `
+                    <article class="calendar-slide-event recent-material-card">
+                        <div>
+                            <strong>${escapeHtml(item.title)}</strong>
+                            <p>${escapeHtml(description)}</p>
+                        </div>
+                        <div class="agenda-meta">
+                            <span class="agenda-pill">${escapeHtml(subjectLabel)}</span>
+                            <span class="agenda-pill">${escapeHtml(categoryLabel)}</span>
+                            <span class="agenda-pill">Recente</span>
+                        </div>
+                        <a class="recent-material-card-link" href="${escapeHtml(subjectHref)}">Ver ${escapeHtml(subjectLabel)}</a>
+                    </article>
+                `;
+            }).join("")
+            : '<div class="agenda-empty">Nenhum material novo cadastrado ainda.</div>';
     }
 
     function renderAgendaList(events) {
@@ -359,12 +430,14 @@ if (isHomePage) {
         const allEvents = window.SiteData.getCalendarEvents();
         const upcomingEvents = window.SiteData.getUpcomingCalendarEvents(8);
         const visibleTimeline = upcomingEvents.length ? upcomingEvents : allEvents.slice(0, 8);
+        const recentMaterials = window.SiteData.getRecentMaterials(3);
 
         renderHighlightEvents(upcomingEvents);
+        renderRecentMaterials(recentMaterials);
         renderAgendaList(upcomingEvents);
         renderAgendaTimeline(visibleTimeline);
         renderAgendaCalendar(allEvents);
-        window.requestAnimationFrame(syncHomeCarouselHeight);
+        window.requestAnimationFrame(rerenderCarousel);
     }
 
     agendaViewButtons.forEach((button) => {
@@ -403,31 +476,66 @@ if (isHomePage) {
     setAgendaView("calendar");
     window.addEventListener("site-data-updated", renderHomeCalendar);
 
-    const slides = Array.from(document.querySelectorAll("[data-slide]"));
-    const dots = Array.from(document.querySelectorAll(".carousel-dot"));
+    const allDots = Array.from(document.querySelectorAll(".carousel-dot"));
     const prevButton = document.getElementById("carousel-prev");
     const nextButton = document.getElementById("carousel-next");
     const carousel = document.getElementById("home-carousel");
     let activeSlide = 0;
     let autoplayId = null;
 
+    function getVisibleSlides() {
+        return Array.from(document.querySelectorAll("[data-slide]:not([hidden])"));
+    }
+
+    function getVisibleDots() {
+        return Array.from(document.querySelectorAll(".carousel-dot:not([hidden])"));
+    }
+
     function renderCarousel(index) {
+        const slides = getVisibleSlides();
+        const dots = getVisibleDots();
+
+        if (slides.length === 0) {
+            return;
+        }
+
+        activeSlide = Math.max(0, Math.min(index, slides.length - 1));
+
+        document.querySelectorAll("[data-slide]").forEach((slide) => {
+            slide.classList.remove("active");
+        });
+
+        document.querySelectorAll(".carousel-dot").forEach((dot) => {
+            dot.classList.remove("active");
+        });
+
         slides.forEach((slide, slideIndex) => {
-            slide.classList.toggle("active", slideIndex === index);
+            slide.classList.toggle("active", slideIndex === activeSlide);
         });
 
         dots.forEach((dot, dotIndex) => {
-            dot.classList.toggle("active", dotIndex === index);
+            dot.classList.toggle("active", dotIndex === activeSlide);
         });
+
+        window.requestAnimationFrame(syncHomeCarouselHeight);
     }
 
     function goToSlide(index) {
+        const slides = getVisibleSlides();
+
+        if (slides.length === 0) {
+            return;
+        }
+
         activeSlide = (index + slides.length) % slides.length;
         renderCarousel(activeSlide);
     }
 
     function startAutoplay() {
+        const slides = getVisibleSlides();
+
         if (slides.length <= 1) {
+            clearInterval(autoplayId);
             return;
         }
 
@@ -437,7 +545,17 @@ if (isHomePage) {
         }, 4800);
     }
 
-    if (slides.length > 0) {
+    rerenderCarousel = () => {
+        const slides = getVisibleSlides();
+
+        if (slides.length === 0) {
+            return;
+        }
+
+        renderCarousel(Math.min(activeSlide, slides.length - 1));
+    };
+
+    if (getVisibleSlides().length > 0) {
         renderCarousel(activeSlide);
         syncHomeCarouselHeight();
         startAutoplay();
@@ -457,8 +575,15 @@ if (isHomePage) {
         });
     }
 
-    dots.forEach((dot, index) => {
+    allDots.forEach((dot) => {
         dot.addEventListener("click", () => {
+            const visibleDots = getVisibleDots();
+            const index = visibleDots.indexOf(dot);
+
+            if (index < 0) {
+                return;
+            }
+
             goToSlide(index);
             startAutoplay();
         });
@@ -548,6 +673,9 @@ function initMemoryGame() {
     const status = document.getElementById("memory-status");
     const best = document.getElementById("memory-best");
     const pads = Array.from(document.querySelectorAll("[data-memory-pad]"));
+    const gameOverPanel = document.getElementById("memory-game-over");
+    const gameOverLevel = document.getElementById("memory-game-over-level");
+    const restartButton = document.getElementById("memory-restart");
 
     if (!startButton || !status || !best || pads.length === 0) {
         return;
@@ -592,23 +720,47 @@ function initMemoryGame() {
         status.textContent = "Sua vez.";
     }
 
+    function hideGameOver() {
+        if (gameOverPanel) {
+            gameOverPanel.hidden = true;
+        }
+    }
+
+    function showGameOver(level) {
+        if (!gameOverPanel || !gameOverLevel) {
+            return;
+        }
+
+        gameOverLevel.textContent = level > 0
+            ? `Voce chegou ao nivel ${level}.`
+            : "Voce pode iniciar outra rodada quando quiser.";
+        gameOverPanel.hidden = false;
+    }
+
     async function nextRound() {
         state.sequence.push(Math.floor(Math.random() * pads.length));
         best.textContent = `Nível: ${state.sequence.length}`;
         await playSequence();
     }
 
-    startButton.addEventListener("click", async () => {
+    async function startMemoryGame() {
         if (state.locked) {
             return;
         }
 
+        hideGameOver();
         state.sequence = [];
         state.userIndex = 0;
         status.textContent = "Começando...";
         startButton.textContent = "Reiniciar";
         await nextRound();
-    });
+    }
+
+    startButton.addEventListener("click", startMemoryGame);
+
+    if (restartButton) {
+        restartButton.addEventListener("click", startMemoryGame);
+    }
 
     pads.forEach((pad) => {
         pad.addEventListener("click", async () => {
@@ -621,13 +773,18 @@ function initMemoryGame() {
             await flashPad(padIndex);
 
             if (padIndex !== state.sequence[state.userIndex]) {
-                state.bestLevel = Math.max(state.bestLevel, state.sequence.length - 1);
+                const reachedLevel = Math.max(0, state.sequence.length - 1);
+                state.bestLevel = Math.max(state.bestLevel, reachedLevel);
                 best.textContent = `Nível: ${state.bestLevel}`;
                 status.textContent = "Errou a sequência. Recomece.";
+                status.textContent = reachedLevel > 0
+                    ? `Fim de jogo. Voce chegou ao nivel ${reachedLevel}.`
+                    : "Fim de jogo. Tente repetir a primeira sequencia.";
                 state.sequence = [];
                 state.userIndex = 0;
                 startButton.textContent = "Jogar de novo";
                 state.locked = false;
+                showGameOver(reachedLevel);
                 return;
             }
 
@@ -754,16 +911,20 @@ function initSnakeGame() {
 
         drawingContext.fillStyle = "#e2e8f0";
         drawingContext.font = "13px JetBrains Mono";
-        drawingContext.fillText(`Score ${state.score}`, 12, 20);
+        drawingContext.fillText(`Pontos ${state.score}`, 12, 20);
 
         if (showGameOver) {
             drawingContext.fillStyle = "rgba(10, 10, 12, 0.74)";
             drawingContext.fillRect(0, 0, canvasElement.width, canvasElement.height);
             drawingContext.fillStyle = "#f8fafc";
-            drawingContext.font = "bold 20px Outfit";
-            drawingContext.fillText("Fim de jogo", canvasElement.width / 2 - 54, canvasElement.height / 2 - 4);
+            drawingContext.textAlign = "center";
+            drawingContext.textBaseline = "middle";
+            drawingContext.font = "bold 24px Outfit";
+            drawingContext.fillText("Fim de jogo", canvasElement.width / 2, canvasElement.height / 2 - 16);
             drawingContext.font = "12px JetBrains Mono";
-            drawingContext.fillText("Aperte jogar para começar de novo", canvasElement.width / 2 - 105, canvasElement.height / 2 + 22);
+            drawingContext.fillText("Aperte Jogar para recomeçar", canvasElement.width / 2, canvasElement.height / 2 + 16);
+            drawingContext.textAlign = "start";
+            drawingContext.textBaseline = "alphabetic";
         }
     }
 
@@ -881,6 +1042,8 @@ function initDodgeGame() {
     const startButton = document.getElementById("dodge-start");
     const status = document.getElementById("dodge-status");
     const best = document.getElementById("dodge-best");
+    const gameOverPanel = document.getElementById("dodge-game-over");
+    const gameOverText = document.getElementById("dodge-game-over-text");
     const moveButtons = Array.from(document.querySelectorAll("[data-dodge-move]"));
 
     if (!canvasElement || !startButton || !status || !best) {
@@ -922,6 +1085,21 @@ function initDodgeGame() {
         best.textContent = `Recorde: ${state.bestScore}`;
     }
 
+    function hideGameOver() {
+        if (gameOverPanel) {
+            gameOverPanel.hidden = true;
+        }
+    }
+
+    function showGameOver() {
+        if (!gameOverPanel || !gameOverText) {
+            return;
+        }
+
+        gameOverText.textContent = `Voce fez ${state.score} pontos. Aperte Jogar para tentar de novo.`;
+        gameOverPanel.hidden = false;
+    }
+
     function drawScene(showGameOver) {
         drawingContext.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
@@ -954,16 +1132,20 @@ function initDodgeGame() {
 
         drawingContext.fillStyle = "#e2e8f0";
         drawingContext.font = "13px JetBrains Mono";
-        drawingContext.fillText(`Score ${state.score}`, 12, 20);
+        drawingContext.fillText(`Pontos ${state.score}`, 12, 20);
 
         if (showGameOver) {
             drawingContext.fillStyle = "rgba(10, 10, 12, 0.72)";
             drawingContext.fillRect(0, 0, canvasElement.width, canvasElement.height);
             drawingContext.fillStyle = "#f8fafc";
-            drawingContext.font = "bold 20px Outfit";
-            drawingContext.fillText("Game Over", canvasElement.width / 2 - 54, canvasElement.height / 2 - 4);
+            drawingContext.textAlign = "center";
+            drawingContext.textBaseline = "middle";
+            drawingContext.font = "bold 22px Outfit";
+            drawingContext.fillText("Fim de jogo", canvasElement.width / 2, canvasElement.height / 2 - 14);
             drawingContext.font = "12px JetBrains Mono";
-            drawingContext.fillText("Aperte jogar para tentar de novo", canvasElement.width / 2 - 92, canvasElement.height / 2 + 22);
+            drawingContext.fillText("Aperte Jogar para tentar de novo", canvasElement.width / 2, canvasElement.height / 2 + 16);
+            drawingContext.textAlign = "start";
+            drawingContext.textBaseline = "alphabetic";
         }
     }
 
@@ -982,8 +1164,9 @@ function initDodgeGame() {
         cancelAnimationFrame(state.frameId);
         state.bestScore = Math.max(state.bestScore, state.score);
         updateBest();
-        status.textContent = `Você fez ${state.score} pontos.`;
+        status.textContent = `Fim de jogo. Você fez ${state.score} pontos.`;
         startButton.textContent = "Jogar de novo";
+        showGameOver();
         drawScene(true);
     }
 
@@ -1043,6 +1226,7 @@ function initDodgeGame() {
         cancelAnimationFrame(state.frameId);
         resetGame();
         state.running = true;
+        hideGameOver();
         status.textContent = "Desvie o máximo que conseguir.";
         startButton.textContent = "Reiniciar";
         drawScene(false);
@@ -1089,6 +1273,7 @@ function initDodgeGame() {
 
     updateBest();
     resetGame();
+    hideGameOver();
     drawScene(false);
 }
 

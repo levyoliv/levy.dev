@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Levy | Engenharia da Computação</title>
+    <title>Levy | Engenharia da Computa&ccedil;&atilde;o</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -21,24 +21,24 @@
             <div class="logo">LEVY<span>.dev</span></div>
 
             <ul class="nav-links" id="nav-menu">
-                <li><a href="index.html" class="active">Início</a></li>
-                <li><a href="paginas/calculo.html">Cálculo</a></li>
-                <li><a href="paginas/fisica.html">Física</a></li>
-                <li><a href="paginas/programacao-c.html">Programação C</a></li>
+                <li><a href="index.html" class="active">In&iacute;cio</a></li>
+                <li><a href="paginas/calculo.html">C&aacute;lculo</a></li>
+                <li><a href="paginas/fisica.html">F&iacute;sica</a></li>
+                <li><a href="paginas/programacao-c.html">Programa&ccedil;&atilde;o C</a></li>
                 <li><a href="paginas/sobre.html">Sobre</a></li>
             </ul>
 
             <div class="nav-actions">
                 <button class="theme-toggle" type="button" data-theme-toggle aria-label="Alternar tema">
-                    <span class="theme-toggle-icon">☀</span>
+                    <span class="theme-toggle-icon">&#9728;</span>
                     <span class="theme-toggle-text">Modo Claro</span>
                 </button>
 
-                <div class="menu-icon" id="menu-toggle">
+                <button class="menu-icon" id="menu-toggle" type="button" aria-controls="nav-menu" aria-expanded="false" aria-label="Abrir menu">
                     <div class="bar"></div>
                     <div class="bar"></div>
                     <div class="bar"></div>
-                </div>
+                </button>
             </div>
         </nav>
     </header>
@@ -51,29 +51,29 @@
 
             <div class="hero-content">
                 <p class="mono-text">Levy.dev</p>
-                <h1 class="glitch-text">PDFs, slides, livros e agenda em um só lugar</h1>
-                <p class="subtitle">Um lugar só para reunir materiais da faculdade, acompanhar provas e organizar o semestre.</p>
+                <h1 class="glitch-text">PDFs, slides, livros e agenda em um s&oacute; lugar</h1>
+                <p class="subtitle">Um lugar s&oacute; para reunir materiais da faculdade, acompanhar provas e organizar o semestre.</p>
 
                 <div class="hero-btns">
                     <a href="#destaques" class="btn btn-primary">Ver Destaques</a>
-                    <a href="#agenda" class="btn btn-secondary">Calendário</a>
+                    <a href="#agenda" class="btn btn-secondary">Calend&aacute;rio</a>
                 </div>
 
                 <div class="hero-status-grid reveal-home">
                     <article class="hero-status-card">
                         <span class="status-label">Rotas</span>
                         <strong>3 disciplinas + agenda</strong>
-                        <p>Cálculo, Física, Programação C e os principais compromissos do semestre.</p>
+                        <p>C&aacute;lculo, F&iacute;sica, Programa&ccedil;&atilde;o C e os principais compromissos do semestre.</p>
                     </article>
                     <article class="hero-status-card">
-                        <span class="status-label">Organização</span>
+                        <span class="status-label">Organiza&ccedil;&atilde;o</span>
                         <strong>Tudo no mesmo lugar</strong>
                         <p>Livros, links, arquivos e lembretes reunidos de forma simples.</p>
                     </article>
                     <article class="hero-status-card">
                         <span class="status-label">Agenda</span>
                         <strong>Compromissos do semestre</strong>
-                        <p>Provas, trabalhos e lembretes aparecem direto na página inicial.</p>
+                        <p>Provas, trabalhos e lembretes aparecem direto na p&aacute;gina inicial.</p>
                     </article>
                 </div>
             </div>
@@ -85,62 +85,72 @@
                     <div>
                         <p class="mono-text">Atalhos principais</p>
                         <h2 class="section-title-left">Destaques</h2>
-                        <p class="section-intro">Atalhos rápidos para cada disciplina e para a agenda.</p>
+                        <p class="section-intro" id="highlights-intro">Atalhos r&aacute;pidos para cada disciplina e para a agenda.</p>
                     </div>
 
                     <div class="carousel-controls" aria-label="Controles do carrossel">
-                        <button class="carousel-btn" id="carousel-prev" type="button" aria-label="Slide anterior">←</button>
-                        <button class="carousel-btn" id="carousel-next" type="button" aria-label="Próximo slide">→</button>
+                        <button class="carousel-btn" id="carousel-prev" type="button" aria-label="Slide anterior">&larr;</button>
+                        <button class="carousel-btn" id="carousel-next" type="button" aria-label="Pr&oacute;ximo slide">&rarr;</button>
                     </div>
                 </div>
 
                 <div class="showcase-carousel" id="home-carousel">
                     <article class="showcase-slide active" data-slide>
-                        <span class="slide-kicker">Cálculo</span>
-                        <h3>Biblioteca de limites, derivadas e prática matemática</h3>
-                        <p>Materiais de aula, exercícios, provas e referências reunidos em uma página só.</p>
+                        <span class="slide-kicker">C&aacute;lculo</span>
+                        <h3>Biblioteca de limites, derivadas e pr&aacute;tica matem&aacute;tica</h3>
+                        <p>Materiais de aula, exerc&iacute;cios, provas e refer&ecirc;ncias reunidos em uma p&aacute;gina s&oacute;.</p>
                         <div class="slide-tags">
                             <span>listas</span>
                             <span>provas</span>
                             <span>slides</span>
                         </div>
                         <div class="slide-actions">
-                            <a href="paginas/calculo.html" class="btn btn-primary">Abrir Cálculo</a>
-                        </div>
-                    </article>
-
-                    <article class="showcase-slide calendar-slide" data-slide>
-                        <span class="slide-kicker">Física</span>
-                        <h3>Materiais enxutos para revisar teoria, exercícios e avaliações</h3>
-                        <p>Uma página direta para organizar listas, livros, provas e revisões de Física.</p>
-                        <div class="slide-tags">
-                            <span>mecânica</span>
-                            <span>listas</span>
-                            <span>provas</span>
-                        </div>
-                        <div class="slide-actions">
-                            <a href="paginas/fisica.html" class="btn btn-primary">Abrir Física</a>
+                            <a href="paginas/calculo.html" class="btn btn-primary">Abrir C&aacute;lculo</a>
                         </div>
                     </article>
 
                     <article class="showcase-slide" data-slide>
-                        <span class="slide-kicker">Programação C</span>
-                        <h3>Laboratório de código com foco em lógica e baixo nível</h3>
-                        <p>Um espaço para revisar ponteiros, algoritmos, snippets e fundamentos de programação estruturada.</p>
+                        <span class="slide-kicker">F&iacute;sica</span>
+                        <h3>Materiais enxutos para revisar teoria, exerc&iacute;cios e avalia&ccedil;&otilde;es</h3>
+                        <p>Uma p&aacute;gina direta para organizar listas, livros, provas e revis&otilde;es de F&iacute;sica.</p>
+                        <div class="slide-tags">
+                            <span>mec&acirc;nica</span>
+                            <span>listas</span>
+                            <span>provas</span>
+                        </div>
+                        <div class="slide-actions">
+                            <a href="paginas/fisica.html" class="btn btn-primary">Abrir F&iacute;sica</a>
+                        </div>
+                    </article>
+
+                    <article class="showcase-slide" data-slide>
+                        <span class="slide-kicker">Programa&ccedil;&atilde;o C</span>
+                        <h3>Laborat&oacute;rio de c&oacute;digo com foco em l&oacute;gica e baixo n&iacute;vel</h3>
+                        <p>Um espa&ccedil;o para revisar ponteiros, algoritmos, snippets e fundamentos de programa&ccedil;&atilde;o estruturada.</p>
                         <div class="slide-tags">
                             <span>ponteiros</span>
                             <span>snippets</span>
                             <span>algoritmos</span>
                         </div>
                         <div class="slide-actions">
-                            <a href="paginas/programacao-c.html" class="btn btn-primary">Abrir Programação</a>
+                            <a href="paginas/programacao-c.html" class="btn btn-primary">Abrir Programa&ccedil;&atilde;o</a>
                         </div>
                     </article>
 
-                    <article class="showcase-slide" data-slide>
-                        <span class="slide-kicker">Calendário</span>
-                        <h3>Próximos eventos acadêmicos em destaque</h3>
-                        <p>Os próximos eventos aparecem aqui para facilitar a rotina do semestre.</p>
+                    <article class="showcase-slide recent-slide" data-slide id="recent-materials-slide" hidden>
+                        <span class="slide-kicker">Novidades</span>
+                        <h3>&Uacute;ltimos materiais adicionados ao acervo</h3>
+                        <p>Livros, playlists, arquivos e refer&ecirc;ncias novas aparecem aqui assim que forem cadastrados.</p>
+                        <div class="calendar-slide-list recent-material-list" id="recent-material-list"></div>
+                        <div class="slide-actions">
+                            <a href="#estudos" class="btn btn-primary">Explorar Materiais</a>
+                        </div>
+                    </article>
+
+                    <article class="showcase-slide calendar-slide" data-slide>
+                        <span class="slide-kicker">Calend&aacute;rio</span>
+                        <h3>Pr&oacute;ximos eventos acad&ecirc;micos em destaque</h3>
+                        <p>Os pr&oacute;ximos eventos aparecem aqui para facilitar a rotina do semestre.</p>
                         <div class="calendar-slide-list" id="calendar-highlight-list"></div>
                         <div class="slide-actions">
                             <a href="#agenda" class="btn btn-primary">Ver Agenda</a>
@@ -148,11 +158,12 @@
                     </article>
                 </div>
 
-                <div class="carousel-dots" aria-label="Navegação dos slides">
+                <div class="carousel-dots" aria-label="Navega&ccedil;&atilde;o dos slides">
                     <button class="carousel-dot active" type="button" aria-label="Ir para slide 1"></button>
                     <button class="carousel-dot" type="button" aria-label="Ir para slide 2"></button>
                     <button class="carousel-dot" type="button" aria-label="Ir para slide 3"></button>
-                    <button class="carousel-dot" type="button" aria-label="Ir para slide 4"></button>
+                    <button class="carousel-dot" id="recent-materials-dot" type="button" aria-label="Ir para slide 4" hidden></button>
+                    <button class="carousel-dot" type="button" aria-label="Ir para slide 5"></button>
                 </div>
             </div>
         </section>
@@ -162,22 +173,22 @@
                 <div class="showcase-topbar">
                     <div>
                         <p class="mono-text">Agenda do semestre</p>
-                        <h2 class="section-title-left">Agenda acadêmica</h2>
-                        <p class="section-intro">Veja os eventos do semestre no formato que ficar melhor para você.</p>
+                        <h2 class="section-title-left">Agenda acad&ecirc;mica</h2>
+                        <p class="section-intro">Veja os eventos do semestre no formato que ficar melhor para voc&ecirc;.</p>
                     </div>
                 </div>
 
                 <div class="agenda-toolbar">
-                    <div class="agenda-view-tabs" role="tablist" aria-label="Visualizações da agenda">
-                        <button class="agenda-view-btn active" type="button" data-agenda-view="calendar">Calendário</button>
+                    <div class="agenda-view-tabs" role="tablist" aria-label="Visualiza&ccedil;&otilde;es da agenda">
+                        <button class="agenda-view-btn active" type="button" data-agenda-view="calendar">Calend&aacute;rio</button>
                         <button class="agenda-view-btn" type="button" data-agenda-view="agenda">Agenda</button>
                         <button class="agenda-view-btn" type="button" data-agenda-view="timeline">Linha do tempo</button>
                     </div>
 
                     <div class="agenda-month-nav" id="agenda-month-nav">
-                        <button class="carousel-btn" id="agenda-prev-month" type="button" aria-label="Mês anterior">←</button>
+                        <button class="carousel-btn" id="agenda-prev-month" type="button" aria-label="M&ecirc;s anterior">&larr;</button>
                         <strong id="agenda-current-month"></strong>
-                        <button class="carousel-btn" id="agenda-next-month" type="button" aria-label="Próximo mês">→</button>
+                        <button class="carousel-btn" id="agenda-next-month" type="button" aria-label="Pr&oacute;ximo m&ecirc;s">&rarr;</button>
                     </div>
                 </div>
 
@@ -190,7 +201,7 @@
                             <span>Qua</span>
                             <span>Qui</span>
                             <span>Sex</span>
-                            <span>Sáb</span>
+                            <span>S&aacute;b</span>
                         </div>
                         <div class="agenda-calendar-grid" id="agenda-calendar-grid"></div>
                     </div>
@@ -208,28 +219,28 @@
 
         <section id="estudos" class="container">
             <div class="section-heading reveal-home">
-                <p class="mono-text">Páginas de estudo</p>
-                <h2 class="section-title">Áreas de Estudo</h2>
-                <p class="section-intro section-intro-centered">Cada disciplina tem sua própria página com materiais e acesso rápido ao que importa.</p>
+                <p class="mono-text">P&aacute;ginas de estudo</p>
+                <h2 class="section-title">&Aacute;reas de estudo</h2>
+                <p class="section-intro section-intro-centered">Cada disciplina tem sua pr&oacute;pria p&aacute;gina com materiais e acesso r&aacute;pido ao que importa.</p>
             </div>
 
             <div class="grid-cards">
                 <a href="paginas/calculo.html" class="card">
-                    <div class="card-icon">∫</div>
-                    <h3>Cálculo</h3>
-                    <p>Derivadas, integrais e modelagem matemática aplicada.</p>
+                    <div class="card-icon">&int;</div>
+                    <h3>C&aacute;lculo</h3>
+                    <p>Derivadas, integrais e modelagem matem&aacute;tica aplicada.</p>
                 </a>
 
                 <a href="paginas/fisica.html" class="card">
-                    <div class="card-icon">λ</div>
-                    <h3>Física</h3>
-                    <p>Mecânica clássica, exercícios e referências organizadas.</p>
+                    <div class="card-icon">&lambda;</div>
+                    <h3>F&iacute;sica</h3>
+                    <p>Mec&acirc;nica cl&aacute;ssica, exerc&iacute;cios e refer&ecirc;ncias organizadas.</p>
                 </a>
 
                 <a href="paginas/programacao-c.html" class="card">
                     <div class="card-icon">{ ; }</div>
-                    <h3>Programação C</h3>
-                    <p>Estrutura de dados, ponteiros e algoritmos de baixo nível.</p>
+                    <h3>Programa&ccedil;&atilde;o C</h3>
+                    <p>Estrutura de dados, ponteiros e algoritmos de baixo n&iacute;vel.</p>
                 </a>
             </div>
         </section>
@@ -237,9 +248,9 @@
         <section id="arcade" class="container arcade-section">
             <div class="arcade-shell reveal-home">
                 <div class="section-heading arcade-heading">
-                    <p class="mono-text">Área de lazer</p>
-                    <h2 class="section-title">Área de lazer</h2>
-                    <p class="section-intro section-intro-centered">Quando quiser dar uma pausa, no fim da página tem alguns jogos rápidos para relaxar.</p>
+                    <p class="mono-text">&Aacute;rea de lazer</p>
+                    <h2 class="section-title">&Aacute;rea de lazer</h2>
+                    <p class="section-intro section-intro-centered">Quando quiser dar uma pausa, no fim da p&aacute;gina tem alguns jogos r&aacute;pidos para relaxar.</p>
                 </div>
 
                 <div class="arcade-grid">
@@ -248,7 +259,7 @@
                             <span class="arcade-label">Reflexo</span>
                             <span class="arcade-score" id="reaction-best">Melhor: --</span>
                         </div>
-                        <h3>Teste de reação</h3>
+                        <h3>Teste de rea&ccedil;&atilde;o</h3>
                         <p>Espere o painel armar e clique no instante certo para medir sua velocidade.</p>
                         <button class="arcade-action" id="reaction-start" type="button">Iniciar rodada</button>
                         <p class="arcade-status" id="reaction-status">Pronto para medir seu tempo.</p>
@@ -256,39 +267,46 @@
 
                     <article class="arcade-card">
                         <div class="arcade-card-head">
-                            <span class="arcade-label">Memória</span>
-                            <span class="arcade-score" id="memory-best">Nível: 0</span>
+                            <span class="arcade-label">Mem&oacute;ria</span>
+                            <span class="arcade-score" id="memory-best">N&iacute;vel: 0</span>
                         </div>
-                        <h3>Sequência luminosa</h3>
-                        <p>Memorize o padrão que acende e repita a ordem sem errar.</p>
-                        <div class="memory-grid">
-                            <button class="memory-pad" type="button" data-memory-pad="0" aria-label="Pad laranja"></button>
-                            <button class="memory-pad" type="button" data-memory-pad="1" aria-label="Pad azul"></button>
-                            <button class="memory-pad" type="button" data-memory-pad="2" aria-label="Pad verde"></button>
-                            <button class="memory-pad" type="button" data-memory-pad="3" aria-label="Pad rosa"></button>
+                        <h3>Sequ&ecirc;ncia luminosa</h3>
+                        <p>Memorize o padr&atilde;o que acende e repita a ordem sem errar.</p>
+                        <div class="memory-grid-wrap">
+                            <div class="memory-grid">
+                                <button class="memory-pad" type="button" data-memory-pad="0" aria-label="Pad laranja"></button>
+                                <button class="memory-pad" type="button" data-memory-pad="1" aria-label="Pad azul"></button>
+                                <button class="memory-pad" type="button" data-memory-pad="2" aria-label="Pad verde"></button>
+                                <button class="memory-pad" type="button" data-memory-pad="3" aria-label="Pad rosa"></button>
+                            </div>
+                            <div class="arcade-overlay" id="memory-game-over" hidden>
+                                <strong>Fim de jogo</strong>
+                                <span id="memory-game-over-level">Voc&ecirc; pode iniciar outra rodada quando quiser.</span>
+                                <button class="arcade-action" id="memory-restart" type="button">Jogar de novo</button>
+                            </div>
                         </div>
-                        <button class="arcade-action" id="memory-start" type="button">Iniciar sequência</button>
-                        <p class="arcade-status" id="memory-status">Repita a sequência para subir de nível.</p>
+                        <button class="arcade-action" id="memory-start" type="button">Iniciar sequ&ecirc;ncia</button>
+                        <p class="arcade-status" id="memory-status">Repita a sequ&ecirc;ncia para subir de n&iacute;vel.</p>
                     </article>
 
                     <article class="arcade-card">
                         <div class="arcade-card-head">
-                            <span class="arcade-label">Clássico</span>
+                            <span class="arcade-label">Cl&aacute;ssico</span>
                             <span class="arcade-score" id="snake-best">Recorde: 0</span>
                         </div>
                         <h3>Cobrinha</h3>
-                        <p>Use `W`, `A`, `S`, `D` ou os botões para comer os blocos e crescer sem bater.</p>
+                        <p>Use <code>W</code>, <code>A</code>, <code>S</code>, <code>D</code> ou os bot&otilde;es para comer os blocos e crescer sem bater.</p>
                         <div class="arcade-dodge-wrap">
                             <canvas id="snake-canvas" width="320" height="320" aria-label="Jogo da cobrinha"></canvas>
                         </div>
                         <button class="arcade-action" id="snake-start" type="button">Jogar</button>
                         <div class="arcade-controls snake-controls">
-                            <button class="arcade-control" type="button" data-snake-dir="up">↑</button>
-                            <button class="arcade-control" type="button" data-snake-dir="left">←</button>
-                            <button class="arcade-control" type="button" data-snake-dir="down">↓</button>
-                            <button class="arcade-control" type="button" data-snake-dir="right">→</button>
+                            <button class="arcade-control" type="button" data-snake-dir="up">&uarr;</button>
+                            <button class="arcade-control" type="button" data-snake-dir="left">&larr;</button>
+                            <button class="arcade-control" type="button" data-snake-dir="down">&darr;</button>
+                            <button class="arcade-control" type="button" data-snake-dir="right">&rarr;</button>
                         </div>
-                        <p class="arcade-status" id="snake-status">Coma os blocos e evite as paredes e o próprio corpo.</p>
+                        <p class="arcade-status" id="snake-status">Coma os blocos e evite as paredes e o pr&oacute;prio corpo.</p>
                     </article>
 
                     <article class="arcade-card">
@@ -297,16 +315,20 @@
                             <span class="arcade-score" id="dodge-best">Recorde: 0</span>
                         </div>
                         <h3>Pixel Dodge</h3>
-                        <p>Use as setas do teclado ou os controles abaixo para desviar dos blocos e sobreviver o máximo possível.</p>
+                        <p>Use as setas do teclado ou os controles abaixo para desviar dos blocos e sobreviver o m&aacute;ximo poss&iacute;vel.</p>
                         <div class="arcade-dodge-wrap">
                             <canvas id="dodge-canvas" width="320" height="200" aria-label="Jogo de desvio"></canvas>
+                            <div class="arcade-overlay" id="dodge-game-over" hidden>
+                                <strong>Fim de jogo</strong>
+                                <span id="dodge-game-over-text">Aperte Jogar para tentar de novo.</span>
+                            </div>
                         </div>
                         <div class="arcade-controls">
-                            <button class="arcade-control" type="button" data-dodge-move="left">←</button>
+                            <button class="arcade-control" type="button" data-dodge-move="left">&larr;</button>
                             <button class="arcade-action" id="dodge-start" type="button">Jogar</button>
-                            <button class="arcade-control" type="button" data-dodge-move="right">→</button>
+                            <button class="arcade-control" type="button" data-dodge-move="right">&rarr;</button>
                         </div>
-                        <p class="arcade-status" id="dodge-status">Escape dos blocos para aumentar sua pontuação.</p>
+                        <p class="arcade-status" id="dodge-status">Escape dos blocos para aumentar sua pontua&ccedil;&atilde;o.</p>
                     </article>
                 </div>
             </div>
@@ -319,26 +341,26 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <div class="logo footer-logo">LEVY<span>.dev</span></div>
-                    <p class="footer-text">Estudante de Engenharia da Computação @ UFC.<br>Desenvolvendo soluções entre o hardware e o software.</p>
+                    <p class="footer-text">Estudante de Engenharia da Computa&ccedil;&atilde;o @ UFC.<br>Desenvolvendo solu&ccedil;&otilde;es entre o hardware e o software.</p>
                 </div>
 
                 <div class="footer-nav">
-                    <h4>Navegação</h4>
+                    <h4>Navega&ccedil;&atilde;o</h4>
                     <ul>
                         <li><a href="paginas/sobre.html">Sobre Mim</a></li>
                         <li><a href="#estudos">Estudos</a></li>
-                        <li><a href="#arcade">Área de Lazer</a></li>
+                        <li><a href="#arcade">&Aacute;rea de lazer</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-contact">
                     <h4>Contato</h4>
-                    <p class="footer-text footer-contact-text">Sobral, Ceará - Brasil<br>contato@levy.dev</p>
+                    <p class="footer-text footer-contact-text">Sobral, Cear&aacute; - Brasil<br>levyoliveira654@gmail.com</p>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p class="footer-copy">&copy; 2026 Levy Oliveira | Engenharia da Computação</p>
+                <p class="footer-copy">&copy; 2026 Levy Oliveira | Engenharia da Computa&ccedil;&atilde;o</p>
                 <div class="social">
                     <a href="#header" class="back-to-top">voltar_ao_topo();</a>
                 </div>

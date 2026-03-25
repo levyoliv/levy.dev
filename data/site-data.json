@@ -1,42 +1,66 @@
 {
-  "version": 2,
+  "version": 4,
   "subjects": {
     "calculo": [
       {
         "id": "calculo-e2cd742f-0d7c-4457-9a02-434d86b83df9",
         "category": "youtube",
-        "title": "Grings | O matemático",
-        "description": "Canal para aprender Cálculo I de graça",
+        "title": "Grings | O matem\u00e1tico",
+        "description": "Canal para aprender C\u00e1lculo I de gra\u00e7a",
         "href": "https://www.youtube.com/watch?v=UFdluaKuXrY&list=PLE6qFDd4x9w_X0GPsV_B73p3VEJXJ7_q7",
         "actionLabel": "Abrir",
         "filePath": "",
         "fileName": "",
         "fileType": "",
-        "fileSize": 0
+        "fileSize": 0,
+        "imageHref": "https://i.ytimg.com/vi/UFdluaKuXrY/hqdefault.jpg",
+        "imagePath": "",
+        "imageName": "",
+        "imageType": "",
+        "imageAlt": "Miniatura da playlist de C\u00e1lculo I do Grings",
+        "imageSize": 0,
+        "createdAt": "2025-01-18T15:00:00.000Z",
+        "updatedAt": "2025-01-18T15:00:00.000Z"
       },
       {
         "id": "calculo-1dc320c8-cbed-4f29-b603-54bbc1996cae",
         "category": "livros",
-        "title": "Cálculo - James Stewart (Vol. 1)",
-        "description": "Um guia essencial com linguagem clara e exercícios práticos para dominar a base do Cálculo.",
+        "title": "C\u00e1lculo - James Stewart (Vol. 1)",
+        "description": "Um guia essencial com linguagem clara e exerc\u00edcios pr\u00e1ticos para dominar a base do C\u00e1lculo.",
         "href": "https://drive.google.com/file/d/1-rY8FYQMqUfN0wo4SYndVPb2LFG6Hmuu/view?usp=drive_link",
         "actionLabel": "Ler",
         "filePath": "",
         "fileName": "",
         "fileType": "",
-        "fileSize": 0
+        "fileSize": 0,
+        "imageHref": "",
+        "imagePath": "",
+        "imageName": "",
+        "imageType": "",
+        "imageAlt": "",
+        "imageSize": 0,
+        "createdAt": "2025-01-22T18:00:00.000Z",
+        "updatedAt": "2025-01-22T18:00:00.000Z"
       },
       {
         "id": "calculo-32569e1b-a05c-4654-8efb-e0c55288b22f",
         "category": "livros",
-        "title": "Cálculo - Simmons com Geometria Analitica (Vol 1)",
-        "description": "Um guia essencial com linguagem clara e exercícios práticos para dominar a base do Cálculo com Geometria Analitica",
+        "title": "C\u00e1lculo - Simmons com Geometria Anal\u00edtica (Vol 1)",
+        "description": "Um guia essencial com linguagem clara e exerc\u00edcios pr\u00e1ticos para dominar a base do C\u00e1lculo com Geometria Anal\u00edtica",
         "href": "https://drive.google.com/file/d/1rv9F3f7mJQvXS_rk9K3mMHjWAggLuR_c/view?usp=drive_link",
         "actionLabel": "Ler",
         "filePath": "",
         "fileName": "",
         "fileType": "",
-        "fileSize": 0
+        "fileSize": 0,
+        "imageHref": "",
+        "imagePath": "",
+        "imageName": "",
+        "imageType": "",
+        "imageAlt": "",
+        "imageSize": 0,
+        "createdAt": "2025-01-24T20:00:00.000Z",
+        "updatedAt": "2025-01-24T20:00:00.000Z"
       }
     ],
     "fisica": [

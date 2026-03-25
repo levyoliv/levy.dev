@@ -52,16 +52,16 @@ body::before {
 
 /* 3. Hero Layout */
 .hero-sub {
-    padding: 150px 0 56px 0;
+    padding: calc(var(--header-offset) + 1.75rem) 0 4rem 0;
     position: relative;
 }
 
 main {
-    padding-bottom: 1.5rem;
+    padding-bottom: 2rem;
 }
 
 .section-padding {
-    padding: 0 0 5rem 0;
+    padding: 0 0 clamp(4.5rem, 7vw, 5.75rem) 0;
 }
 
 .hero-sub::after {
@@ -78,7 +78,7 @@ main {
 
 /* 4. Sistema de Filtros */
 .filter-container {
-    margin-bottom: 3rem;
+    margin-bottom: 3.25rem;
 }
 
 .filter-group {
@@ -119,13 +119,14 @@ main {
 .material-item {
     background: var(--card-bg);
     border-left: 4px solid var(--accent-color);
-    padding: 1.5rem 1.75rem;
-    border-radius: 0 12px 12px 0;
-    display: flex;
-    justify-content: space-between;
+    padding: 1.3rem 1.4rem;
+    border-radius: 0 20px 20px 0;
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr) auto;
+    gap: 1.25rem;
     align-items: center;
     transition: var(--transition);
-    border: 1px solid transparent;
+    border: 1px solid rgba(0, 212, 255, 0.14);
 }
 
 .mat-actions {
@@ -133,12 +134,13 @@ main {
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 0.75rem;
+    align-items: center;
 }
 
 .material-item:hover {
     background: rgba(0, 212, 255, 0.05);
-    transform: translateX(8px);
-    border-color: rgba(0, 212, 255, 0.2);
+    transform: translateY(-4px);
+    border-color: rgba(0, 212, 255, 0.24);
 }
 
 /* Tags */
@@ -202,6 +204,10 @@ main {
     filter: none;
 }
 
+.mat-actions .btn-sm {
+    white-space: nowrap;
+}
+
 body[data-theme="light"]::before {
     opacity: 0.45;
 }
@@ -251,9 +257,20 @@ body[data-theme="light"] .material-item:hover {
 }
 
 /* Responsividade */
+@media (max-width: 1024px) {
+    .material-item {
+        grid-template-columns: 120px minmax(0, 1fr);
+    }
+
+    .mat-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+}
+
 @media (max-width: 768px) {
     .hero-sub {
-        padding: 130px 0 40px 0;
+        padding: calc(var(--header-offset) + 1rem) 0 3rem 0;
     }
 
     .hero-sub::after,
@@ -262,13 +279,13 @@ body[data-theme="light"] .material-item:hover {
     }
 
     .section-padding {
-        padding: 0 0 4rem 0;
+        padding: 0 0 4.5rem 0;
     }
 
     .material-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
+        grid-template-columns: 1fr;
+        justify-items: flex-start;
+        gap: 1rem;
     }
 
     .mat-actions {
@@ -278,7 +295,7 @@ body[data-theme="light"] .material-item:hover {
     }
 
     .btn-sm {
-        flex: 1;
+        flex: 1 1 180px;
         text-align: center;
     }
 

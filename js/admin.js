@@ -78,6 +78,11 @@
     const materialFile = document.getElementById("material-file");
     const materialHref = document.getElementById("material-href");
     const materialFileStatus = document.getElementById("material-file-status");
+    const materialImageFile = document.getElementById("material-image-file");
+    const materialImageHref = document.getElementById("material-image-href");
+    const materialImageAlt = document.getElementById("material-image-alt");
+    const materialImageStatus = document.getElementById("material-image-status");
+    const materialImageRemove = document.getElementById("material-image-remove");
     const materialActionLabel = document.getElementById("material-action-label");
     const materialCancel = document.getElementById("material-cancel");
     const subjectFormPrefix = document.getElementById("subject-form-prefix");
@@ -126,6 +131,10 @@
 
     function setFileStatus(message, tone) {
         setHelperText(materialFileStatus, message, tone);
+    }
+
+    function setImageStatus(message, tone) {
+        setHelperText(materialImageStatus, message, tone);
     }
 
     function setGitHubStatus(message, tone) {
@@ -208,6 +217,10 @@
         return `Envie um arquivo para publicar no repositorio ou use um link publico externo. Limite do admin: ${formatBytes(MAX_UPLOAD_SIZE)} por arquivo.`;
     }
 
+    function getDefaultImageMessage() {
+        return "Opcional: envie uma imagem de capa ou use um link de imagem para exibir o material com miniatura padronizada.";
+    }
+
     function sanitizeFileName(fileName) {
         const normalized = String(fileName || "")
             .normalize("NFD")
@@ -241,6 +254,10 @@
         return `uploads/${window.SiteData.normalizeSubject(subject)}/${itemId}/${sanitizeFileName(fileName)}`;
     }
 
+    function buildAssetUploadPath(subject, itemId, assetFolder, fileName) {
+        return `uploads/${window.SiteData.normalizeSubject(subject)}/${itemId}/${assetFolder}/${sanitizeFileName(fileName)}`;
+    }
+
     function getEditingMaterial() {
         if (!materialId.value) {
             return null;
@@ -260,6 +277,18 @@
         }
 
         return /^https?:\/\//i.test(item.href) ? "Link externo" : item.href;
+    }
+
+    function describeImage(item) {
+        if (item.imagePath) {
+            return `Imagem: ${item.imageName || item.imagePath.split("/").pop()}`;
+        }
+
+        if (!item.imageHref) {
+            return "Sem imagem";
+        }
+
+        return /^https?:\/\//i.test(item.imageHref) ? "Imagem externa" : item.imageHref;
     }
 
     function updateMaterialFileUi() {
@@ -295,11 +324,50 @@
         setFileStatus(getDefaultUploadMessage(), "");
     }
 
+    function updateMaterialImageUi() {
+        const selectedImage = materialImageFile.files?.[0];
+        const existingItem = getEditingMaterial();
+        const normalizedImageHref = normalizeMaterialHref(materialImageHref.value);
+
+        if (materialImageRemove.checked) {
+            setImageStatus("A imagem atual sera removida quando voce salvar o material.", "warning");
+            return;
+        }
+
+        if (selectedImage) {
+            if (selectedImage.size > MAX_UPLOAD_SIZE) {
+                setImageStatus(getUploadLimitMessage(), "error");
+                return;
+            }
+
+            setImageStatus(`Imagem pronta para publicar: ${selectedImage.name} (${formatBytes(selectedImage.size)}).`, "success");
+            return;
+        }
+
+        if (normalizedImageHref) {
+            setImageStatus(
+                /^https?:\/\//i.test(normalizedImageHref)
+                    ? "Link de imagem pronto para uso."
+                    : "Caminho relativo de imagem informado. Confirme se ele existe no repositorio.",
+                /^https?:\/\//i.test(normalizedImageHref) ? "success" : "warning"
+            );
+            return;
+        }
+
+        if (existingItem?.imageHref) {
+            setImageStatus(`Imagem atual: ${existingItem.imageName || existingItem.imageHref.split("/").pop()}.`, "warning");
+            return;
+        }
+
+        setImageStatus(getDefaultImageMessage(), "");
+    }
+
     function resetMaterialForm() {
         materialForm.reset();
         materialId.value = "";
         materialActionLabel.value = "Abrir";
         updateMaterialFileUi();
+        updateMaterialImageUi();
     }
 
     function resetCalendarForm() {
@@ -371,6 +439,7 @@
                 <div class="admin-badges">
                     <span class="admin-badge">${escapeHtml(item.actionLabel || "Abrir")}</span>
                     <span class="admin-badge">${escapeHtml(describeTarget(item))}</span>
+                    <span class="admin-badge">${escapeHtml(describeImage(item))}</span>
                 </div>
                 <div class="admin-item-actions">
                     <button class="btn-inline" type="button" data-edit-material="${escapeHtml(item.id)}">Editar</button>
@@ -534,10 +603,13 @@
         }
 
         const selectedFile = materialFile.files?.[0] || null;
+        const selectedImageFile = materialImageFile.files?.[0] || null;
         const normalizedHref = normalizeMaterialHref(materialHref.value);
+        const normalizedImageHref = normalizeMaterialHref(materialImageHref.value);
         const editingItem = getEditingMaterial();
+        const hasExistingTarget = Boolean(editingItem?.href || editingItem?.filePath);
 
-        if (!selectedFile && !normalizedHref) {
+        if (!selectedFile && !normalizedHref && !hasExistingTarget) {
             setFileStatus("Envie um arquivo ou informe um link público para publicar esse material.", "error");
             return;
         }
@@ -547,18 +619,32 @@
             return;
         }
 
+        if (selectedImageFile && selectedImageFile.size > MAX_UPLOAD_SIZE) {
+            setImageStatus(getUploadLimitMessage(), "error");
+            return;
+        }
+
         setPublishingState(true);
         setGitHubStatus("Publicando material no GitHub...", "warning");
 
         try {
             const config = getGitHubConfig();
             const nextId = materialId.value || window.SiteData.buildId(window.SiteData.normalizeSubject(state.activeTab));
+            const nextTitle = materialTitle.value.trim();
+            const timestamp = new Date().toISOString();
             const previousFilePath = editingItem?.filePath || "";
-            let nextHref = normalizedHref;
+            const previousImagePath = editingItem?.imagePath || "";
+            let nextHref = normalizedHref || editingItem?.href || "";
             let nextFilePath = editingItem?.filePath || "";
             let nextFileName = editingItem?.fileName || "";
             let nextFileType = editingItem?.fileType || "";
             let nextFileSize = editingItem?.fileSize || 0;
+            let nextImageHref = editingItem?.imageHref || "";
+            let nextImagePath = editingItem?.imagePath || "";
+            let nextImageName = editingItem?.imageName || "";
+            let nextImageType = editingItem?.imageType || "";
+            let nextImageSize = editingItem?.imageSize || 0;
+            let nextImageAlt = materialImageAlt.value.trim() || editingItem?.imageAlt || "";
 
             if (selectedFile) {
                 nextFilePath = buildUploadPath(state.activeTab, nextId, selectedFile.name);
@@ -587,17 +673,63 @@
                 }
             }
 
+            if (selectedImageFile) {
+                nextImagePath = buildAssetUploadPath(state.activeTab, nextId, "cover", selectedImageFile.name);
+                nextImageHref = `../${nextImagePath}`;
+                nextImageName = selectedImageFile.name;
+                nextImageType = selectedImageFile.type || "";
+                nextImageSize = selectedImageFile.size;
+                nextImageAlt = nextImageAlt || `Imagem de capa de ${nextTitle}`;
+
+                await window.GitHubPublisher.uploadBinaryFile(
+                    nextImagePath,
+                    selectedImageFile,
+                    config,
+                    `Upload imagem ${window.SiteData.normalizeSubject(state.activeTab)}: ${selectedImageFile.name}`
+                );
+            } else if (materialImageRemove.checked) {
+                nextImageHref = "";
+                nextImagePath = "";
+                nextImageName = "";
+                nextImageType = "";
+                nextImageAlt = "";
+                nextImageSize = 0;
+            } else if (normalizedImageHref) {
+                nextImageHref = normalizedImageHref;
+                nextImageAlt = nextImageAlt || `Imagem de capa de ${nextTitle}`;
+
+                const keepExistingImage = Boolean(
+                    editingItem?.imagePath
+                    && (normalizedImageHref === editingItem.imageHref || normalizedImageHref === `../${editingItem.imagePath}`)
+                );
+
+                if (!keepExistingImage) {
+                    nextImagePath = "";
+                    nextImageName = "";
+                    nextImageType = "";
+                    nextImageSize = 0;
+                }
+            }
+
             const nextItem = {
                 id: nextId,
                 category: materialCategory.value,
-                title: materialTitle.value.trim(),
+                title: nextTitle,
                 description: materialDescription.value.trim(),
                 href: nextHref,
                 actionLabel: materialActionLabel.value.trim() || "Abrir",
                 filePath: nextFilePath,
                 fileName: nextFileName,
                 fileType: nextFileType,
-                fileSize: nextFileSize
+                fileSize: nextFileSize,
+                imageHref: nextImageHref,
+                imagePath: nextImagePath,
+                imageName: nextImageName,
+                imageType: nextImageType,
+                imageAlt: nextImageAlt,
+                imageSize: nextImageSize,
+                createdAt: editingItem?.createdAt || timestamp,
+                updatedAt: timestamp
             };
 
             const nextData = getDataWithMaterial(state.activeTab, nextItem);
@@ -612,13 +744,23 @@
                 }
             }
 
+            if (previousImagePath && previousImagePath !== nextImagePath) {
+                try {
+                    await window.GitHubPublisher.deleteFile(previousImagePath, config, `Remove imagem antiga: ${nextItem.title}`);
+                } catch (deleteError) {
+                    setGitHubStatus("Material publicado, mas a imagem antiga não pôde ser removida automaticamente.", "warning");
+                }
+            }
+
             resetMaterialForm();
             renderMaterialList();
             setFileStatus("Material publicado com sucesso no GitHub.", "success");
+            setImageStatus(nextItem.imageHref ? "Imagem do material atualizada com sucesso." : getDefaultImageMessage(), nextItem.imageHref ? "success" : "");
             setGitHubStatus("Material salvo no repositório. Aguarde o GitHub Pages refletir a alteração.", "success");
         } catch (error) {
             setGitHubStatus(error.message || "Não foi possível publicar o material.", "error");
             setFileStatus("Falha ao publicar. Revise a configuração do GitHub e tente novamente.", "error");
+            setImageStatus("Falha ao atualizar a imagem do material.", "error");
         } finally {
             setPublishingState(false);
         }
@@ -652,12 +794,21 @@
                 }
             }
 
+            if (item.imagePath) {
+                try {
+                    await window.GitHubPublisher.deleteFile(item.imagePath, config, `Remove imagem: ${item.title}`);
+                } catch (deleteError) {
+                    setGitHubStatus("Item removido da lista, mas a imagem antiga não pôde ser apagada automaticamente.", "warning");
+                }
+            }
+
             if (materialId.value === itemId) {
                 resetMaterialForm();
             }
 
             renderMaterialList();
             setFileStatus("Material removido com sucesso.", "success");
+            setImageStatus(getDefaultImageMessage(), "");
         } catch (error) {
             setGitHubStatus(error.message || "Não foi possível excluir o material.", "error");
         } finally {
@@ -757,6 +908,23 @@
 
     materialFile.addEventListener("change", updateMaterialFileUi);
     materialHref.addEventListener("input", updateMaterialFileUi);
+    materialImageFile.addEventListener("change", () => {
+        materialImageRemove.checked = false;
+        updateMaterialImageUi();
+    });
+    materialImageHref.addEventListener("input", () => {
+        materialImageRemove.checked = false;
+        updateMaterialImageUi();
+    });
+    materialImageRemove.addEventListener("change", () => {
+        if (materialImageRemove.checked) {
+            materialImageFile.value = "";
+            materialImageHref.value = "";
+            materialImageAlt.value = "";
+        }
+
+        updateMaterialImageUi();
+    });
     materialForm.addEventListener("submit", handleMaterialSubmit);
     materialCancel.addEventListener("click", resetMaterialForm);
     calendarForm.addEventListener("submit", handleCalendarSubmit);
@@ -779,8 +947,12 @@
             materialCategory.value = item.category;
             materialDescription.value = item.description;
             materialHref.value = item.href || "";
+            materialImageHref.value = item.imageHref || "";
+            materialImageAlt.value = item.imageAlt || "";
+            materialImageRemove.checked = false;
             materialActionLabel.value = item.actionLabel || "Abrir";
             updateMaterialFileUi();
+            updateMaterialImageUi();
             materialTitle.focus();
         }
 

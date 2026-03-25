@@ -50,6 +50,7 @@ const globalMenuToggle = document.getElementById("menu-toggle");
 const globalNavMenu = document.getElementById("nav-menu");
 const globalHeader = document.getElementById("header");
 const globalNavActions = document.querySelector(".nav-actions");
+const NAV_BREAKPOINT = 960;
 
 function setNavMenuState(isOpen) {
     if (!globalNavMenu) {
@@ -61,6 +62,8 @@ function setNavMenuState(isOpen) {
 
     if (globalMenuToggle) {
         globalMenuToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        globalMenuToggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
+        globalMenuToggle.classList.toggle("is-active", isOpen);
     }
 }
 
@@ -102,7 +105,7 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
 });
 
 document.addEventListener("click", (event) => {
-    if (!globalNavMenu || !globalMenuToggle || window.innerWidth > 768) {
+    if (!globalNavMenu || !globalMenuToggle || window.innerWidth > NAV_BREAKPOINT) {
         return;
     }
 
@@ -138,12 +141,17 @@ function updateShellScrollState() {
 
 window.addEventListener("scroll", updateShellScrollState);
 window.addEventListener("resize", () => {
-    if (window.innerWidth > 768) {
+    if (window.innerWidth > NAV_BREAKPOINT) {
         setNavMenuState(false);
     }
 });
 updateShellScrollState();
 ensureAdminShortcut();
+
+if (globalMenuToggle) {
+    globalMenuToggle.setAttribute("aria-label", "Abrir menu");
+    globalMenuToggle.setAttribute("aria-expanded", "false");
+}
 
 window.SiteShell = {
     applyTheme,

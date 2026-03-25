@@ -89,6 +89,61 @@
         };
     }
 
+    function resolveAssetSource(href, filePath) {
+        const normalizedHref = String(href || "").trim();
+        const normalizedPath = String(filePath || "").trim();
+
+        if (normalizedHref) {
+            return normalizedHref;
+        }
+
+        if (!normalizedPath) {
+            return "";
+        }
+
+        if (/^(https?:\/\/|data:|\.{1,2}\/|\/)/i.test(normalizedPath)) {
+            return normalizedPath;
+        }
+
+        return `../${normalizedPath}`;
+    }
+
+    function getPlaceholderLabel(item) {
+        const titleTokens = String(item?.title || "")
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+        if (titleTokens.length > 0) {
+            return titleTokens
+                .slice(0, 2)
+                .map((token) => token.charAt(0).toUpperCase())
+                .join("");
+        }
+
+        return String(categoryLabels[item?.category] || "ITEM").slice(0, 3).toUpperCase();
+    }
+
+    function renderItemThumbnail(item) {
+        const imageSource = resolveAssetSource(item.imageHref, item.imagePath);
+
+        if (imageSource) {
+            const imageAlt = item.imageAlt || `Imagem de capa de ${item.title}`;
+
+            return `
+                <div class="material-thumb has-image">
+                    <img src="${escapeHtml(imageSource)}" alt="${escapeHtml(imageAlt)}" loading="lazy">
+                </div>
+            `;
+        }
+
+        return `
+            <div class="material-thumb material-thumb-fallback" aria-hidden="true">
+                <span>${escapeHtml(getPlaceholderLabel(item))}</span>
+            </div>
+        `;
+    }
+
     function renderItems() {
         const items = window.SiteData.getSubjectItems(subject);
         const visibleItems = activeFilter === "all"
@@ -121,6 +176,7 @@
 
             return `
                 <div class="${subjectConfig.itemClass}" data-category="${item.category}">
+                    ${renderItemThumbnail(item)}
                     <div class="${subjectConfig.infoClass}">
                         <span class="tag ${extraTagClass}">${escapeHtml(categoryLabels[item.category] || String(item.category || "").toUpperCase())}</span>
                         <h3>${escapeHtml(item.title)}</h3>
